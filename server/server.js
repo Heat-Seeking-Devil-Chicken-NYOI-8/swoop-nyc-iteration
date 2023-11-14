@@ -1,9 +1,9 @@
 const express = require('express')
+const cookieSession = require("cookie-session");
 const app = express();
 const PORT = 3000;
 // const userRouter = require('./router/userRouter');
 const cors = require("cors");
-const cookieSession = require("cookie-session");
 const itemRouter = require('./router/itemRouter.js');
 const itemController = require('./controller/itemController.js')
 const path = require('path')
@@ -14,11 +14,11 @@ var corsOptions = {
   origin: "http://localhost:8080"
 };
 app.use(cors(corsOptions));
+app.use(express.json());
 
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-app.use(express.json());
 mongoose.connect(process.env.DATABASE_CONNECTION_KEY)
 mongoose.connection.once('open', () => {
     console.log('Connected to Database');
