@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom';
-import SideNav from './SideNavRoutes.jsx';
 import { useState } from 'react';
 
 
