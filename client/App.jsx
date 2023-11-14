@@ -1,15 +1,13 @@
 import React from 'react';
-import Header from './Header.jsx';
+import Header from './components/Header.jsx';
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import SideNav from './SideNav.jsx';
-import '../styles.css'
-import '../../build/calendar.css'
-import CreatePost from './sidenav/CreatePost.jsx';
+import './styles.css'
+import '../build/calendar.css'
+import CreatePost from './components/sidenav/CreatePost.jsx';
 import Listings from './containers/Listings.jsx';
-import Login from './sidenav/Login.jsx';
-import Signup from './sidenav/SignUp.jsx';
+import Login from './components/sidenav/Login.jsx';
+import Signup from './components/sidenav/SignUp.jsx';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { updateItems } from './reducers/swoopSlice.js';
 
 
