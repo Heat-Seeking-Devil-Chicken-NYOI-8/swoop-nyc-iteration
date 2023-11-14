@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit'
-import swoopSlice from './swoopSlice.js'
+import swoopSlice from './reducers/swoopSlice.js'
 
 const store = configureStore({
     devTools: true,
