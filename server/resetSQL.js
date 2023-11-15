@@ -1,6 +1,7 @@
 const db = require('./model.js');
 
-db.query(`
+const reset = async () => {
+  await db.query(`
   --Drop existing tables if they exist
   DROP TABLE IF EXISTS listings CASCADE;
   DROP TABLE IF EXISTS tags CASCADE;
@@ -27,3 +28,6 @@ db.query(`
   -- INSERT INTO listings () VALUES ();
   -- INSERT INTO tags () VALUES ();
 `);
+}
+
+reset();
