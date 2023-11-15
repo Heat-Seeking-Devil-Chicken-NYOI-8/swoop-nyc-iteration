@@ -3,30 +3,29 @@ import { createSlice } from '@reduxjs/toolkit';
 export const mainSlice = createSlice({
     name: 'main',
     initialState: {
-        location: {
-            zip: '',
-            lat: '',
-            lng: '',
-        },
+        navPosition: 'Browse', // 'Browse' or 'Upload' or 'Map'
+        location: null, // {zip, lat, lng}
         listings: [], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
         newListing: {}, // {_id, creation_date, description,...}
         newListingPhoto: {}, // {url, lat, lng}
         activeListing: '', // _id
-        searchInput: '',
-        activeButton: 'Browse'
+        searchInput: '', // current text in search box
     },
     reducers: {
+        setNavPosition: (state, action) => { // payload: 'Browse' or 'Upload' or 'Map'
+            state.navPosition = action.payload;
+        },
         setLocation: (state, action) => { // payload: { zip, lat, lng }
             state.location = action.payload;
         },
         savePhoto: (state, action) => { // payload: { url, lat, lng }
             state.newListingPhoto = action.payload;
         },
+        initializeListings: (state, action) => { // payload: [{same format as addNew Listing}, {},...]
+            state.listings = action.payload;
+        },
         addNewListing: (state, action) => { // payload: { _id, creation_date, url, lat, lng, tags, description, flag }
             state.listings.push(action.payload);
-        },
-        setListings: (state, action) => { // payload: [{same format as addNew Listing}, {},...]
-            state.listings = action.payload;
         },
         setActiveListing: (state, action) => { // payload = _id
             state.activeListing = action.payload;
@@ -42,10 +41,11 @@ export const mainSlice = createSlice({
 
 // Export actions for use in components
 export const {
+    setNavPosition,
     setLocation,
     savePhoto,
+    initializeListings,
     addNewListing,
-    setListings,
     setActiveListing,
     removeListing,
     setSearchInput,
