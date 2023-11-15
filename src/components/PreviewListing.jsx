@@ -10,47 +10,16 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 
 export default function PreviewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
 
-// return (
-//   <>
-//   return (
-//     <Card sx={{ maxWidth: 345 }}>
-//       <CardMedia
-//         component="img"
-//         alt="green iguana"
-//         height="140"
-//         image="/static/images/cards/contemplative-reptile.jpg"
-//       />
-//       <CardContent>
-//         <Typography gutterBottom variant="h5" component="div">
-//           Blue chair
-//         </Typography>
-//         <Typography variant="body2" color="text.secondary">
-//           This is a description paragraph about blue chair
-//         </Typography>
-//       </CardContent>
-//       <CardActions>
-//         <Button variant = "contained" size="small">Cancel</Button>
-//         <Button variant = "contained" size="small">Post</Button>
-//       </CardActions>
-//     </Card>
-//   );
-//   </>
-//   )
-// }
-
-//or using boxes:
-//textalign center
-
-
 return (
   <>
-  <Box 
+    <Box 
     display="flex" 
     flexDirection ="column" 
     justifyContent="center"
@@ -59,26 +28,33 @@ return (
     padding ="50px"
     >
 
-    <Box display="flex" marginTop = "10px" marginBottom="10px">
-       //image
+    <Box display="flex" 
+    alignContent="center"
+    >
+    <img src= "https://i.imgur.com/f7VXJQF.jpeg" width="100%"/>
     </Box>
 
     <Box display="flex" marginTop = "10px" marginBottom="10px">
-        //tags
+      <Stack direction="row" spacing={1}>
+        <Chip label="Chair" sx={{width: "100px"}} />
+        <Chip label="Blue" sx={{width: "100px"}} />
+        <Chip label="Big chair" sx={{width: "100px"}} />
+        <Chip label="Blue chair" sx={{width: "100px"}}/>
+        </Stack>
     </Box>
 
 
-    <Box display="flex" marginTop = "10px" marginBottom="10px">
+    <Box marginTop = "10px" marginBottom="10px" paddingLeft = "2">
       <p> 
         <Typography variant="body2">
-          //description
+          hi this is the description of the item that is listed above bcvdhjfzkbvx,cnjmnvdjf,nslac.masKXLs;ajefrkghjlsbd.nv zmxc,bvskdjfhzdcskafielrsurbhjvdfjn.cskmdlwejiflshugv n vbhdjcnjkdsjvbgvjnkdewjruhvjnfvbckjdf vhgkbj,nk.bhjvghcfgdxsrftyguhbhvgfcfvbn, 
           </Typography>
       </p>
     </Box>
 
-    <Box display="flex" padding ="10px"> 
-      <Button variant = "contained" size="small">Cancel</Button>
-      <Button variant = "contained" size="small">Post</Button>
+    <Box display="flex" flexDirection = "row" alignContent="space-between" padding ="10px"> 
+      <Button variant = "contained" size="small" sx= {{margin: "3px"}}>Cancel</Button>
+      <Button variant = "contained" size="small" sx= {{margin: "3px"}}>Post</Button>
     </Box>
 
   </Box>
