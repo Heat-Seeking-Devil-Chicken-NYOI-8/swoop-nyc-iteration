@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
+import { Box, BottomNavigation, BottomNavigationAction, Container } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -26,7 +26,9 @@ export default function App() {
   // else
   return (
     <Router>
+
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        {/* <Container> */}
         <Box sx={{ flexGrow: 1 }}>
           <Routes>
             <Route path="/" element={<Browse />} />
@@ -36,6 +38,7 @@ export default function App() {
             <Route path="/viewlisting" element={<ViewListing />} />
           </Routes>
         </Box>
+        {/* </Container> */}
         <BottomNavigation
           showLabels
           value={state.navPosition}
