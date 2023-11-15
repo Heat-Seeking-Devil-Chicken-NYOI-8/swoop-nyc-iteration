@@ -12,12 +12,16 @@ export default function Upload() {
     <Box
       display="flex"
       flexDirection="column"
-      alignItems="center">
-      <Button sx={{ border: "1px dotted black", minHeight: "82vh", minWidth: "83vw", marginTop: "3vh", marginX: "5vw", marginBottom: "6vh" }}>
+      alignItems="center"
+    >
+      <Button sx={{
+        border: "1px dotted darkGray",
+        minHeight: "82vh", minWidth: "83vw", marginTop: "3vh", marginX: "5vw", marginBottom: "6vh"
+      }}>
         <Box paddingBottom={"5%"}>
-          <Upgrade sx={{ fontSize: "20vw", maxBlockSize: "130px" }} ></Upgrade>
+          <Upgrade sx={{ fontSize: "20vw", maxBlockSize: "130px", color: "#EEE" }} ></Upgrade>
           <br />
-          <Typography variant="body2" textAlign="center" fontSize={"8vw"} maxBlockSize="180px">Click to Upload Photo</Typography>
+          <Typography color="#EEE" variant="body2" textAlign="center" fontSize={"8vw"} maxBlockSize="180px">Click to Upload Photo</Typography>
         </Box>
       </Button >
     </Box >
