@@ -18,7 +18,7 @@ const App = () => {
       // Initialize the map on a DOM element with id of 'map' that is created on first render
       const newMap = new google.maps.Map(document.getElementById('map'), {
         center: { lat: -34.397, lng: 150.644 },
-        zoom: 2,
+        zoom: 10,
       });
       //store the map as a state so it can be referenced outside
       setMap(newMap);
@@ -44,7 +44,8 @@ const App = () => {
   function zipCenter(e) {
     e.preventDefault();
     console.log(zip);
-    fetch('/api/setZip', {
+    console.log(map.getBounds());
+    fetch('/api/setCenter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ zip: zip }),
