@@ -17,13 +17,14 @@ export default function App() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.main);
 
-  // if (!state.location)
-  //   return (
-  //     <Box>
-  //       <GetLocation />
-  //     </Box>
-  //   );
-  // else
+  if (!state.location)
+    return (
+      <Box>
+        {/* <GetLocation /> */}
+        <PreviewListing />
+      </Box>
+    );
+  else
   return (
     <Router>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>

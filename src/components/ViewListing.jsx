@@ -7,5 +7,10 @@ export default function ViewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
 
-  return <>ViewListing Component</>;
+  return (
+  <>
+  ViewListing Component
+  
+  </>
+  )
 }
