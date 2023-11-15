@@ -1,7 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Box, BottomNavigation, BottomNavigationAction, Container } from "@mui/material";
+import {
+  Box,
+  Paper,
+  BottomNavigation,
+  BottomNavigationAction,
+  CssBaseline,
+} from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -17,35 +23,38 @@ export default function App() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.main);
 
-  if (!state.location)
-    return (
-      <Box>
-        <GetLocation />
-      </Box>
-    );
-  else
-    return (
-      <Router>
+  // if (!state.location)
+  //   return (
+  //     <Box>
+  //       <CssBaseline />
+  //       <GetLocation />
+  //     </Box>
+  //   );
+  // else
+  return (
+    <Router>
+      <CssBaseline />
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
+          <Routes>
+            <Route path="/" element={<Browse />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/map" element={<Map />} />
+            <Route path="/previewlisting" element={<PreviewListing />} />
+            <Route path="/viewlisting" element={<ViewListing />} />
+          </Routes>
+        </Box>
 
-        <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-          {/* <Container> */}
-          <Box sx={{ flexGrow: 1 }}>
-            <Routes>
-              <Route path="/" element={<Browse />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/map" element={<Map />} />
-              <Route path="/previewlisting" element={<PreviewListing />} />
-              <Route path="/viewlisting" element={<ViewListing />} />
-            </Routes>
-          </Box>
-          {/* </Container> */}
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          elevation={3}
+        >
           <BottomNavigation
             showLabels
             value={state.navPosition}
             onChange={(event, newPosition) => {
               dispatch(setNavPosition(newPosition));
             }}
-            sx={{ width: "100%", position: "fixed", bottom: 0 }}
           >
             <BottomNavigationAction
               label="Upload"
@@ -66,7 +75,8 @@ export default function App() {
               to="/map"
             />
           </BottomNavigation>
-        </Box>
-      </Router>
-    );
+        </Paper>
+      </Box>
+    </Router>
+  );
 }
