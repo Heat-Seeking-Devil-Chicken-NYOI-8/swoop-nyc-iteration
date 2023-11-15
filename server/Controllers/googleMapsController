@@ -1,0 +1,23 @@
+const apiKey = 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4';
+const googleMapsController = {};
+
+googleMapsController.getCoordinatesFromZip = (req, res, next) => {
+  const { zip } = req.body;
+  fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${apiKey}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      res.locals.data = data.results[0].geometry.location;
+      return next();
+    })
+    .catch(() => {
+      return next({
+        log: 'could not get coordinates from google',
+        status: 400,
+        message: { err: 'could not get coordinates' },
+      });
+    });
+};
+
+module.exports = googleMapsController;
