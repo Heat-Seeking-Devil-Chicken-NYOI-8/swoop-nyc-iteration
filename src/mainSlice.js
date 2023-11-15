@@ -6,7 +6,6 @@ export const mainSlice = createSlice({
         navPosition: 'Browse', // 'Browse' or 'Upload' or 'Map'
         location: null, // {zip, lat, lng}
         listings: [], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
-        newListing: {}, // {_id, creation_date, description,...}
         newListingPhoto: {}, // {url, lat, lng}
         activeListing: '', // _id
         searchInput: '', // current text in search box
