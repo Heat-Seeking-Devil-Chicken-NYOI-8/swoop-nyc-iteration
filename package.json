@@ -1,22 +1,17 @@
 {
-  "name": "stooper",
-  "version": "1.0.0",
+  "name": "swoopnyc",
+  "version": "2.0.0",
   "description": "Our application sets out to help New Yorkers post their unwanted items anonymously and allows their fellow neighbors the ability to search for items in their specific neighborhoods.",
   "main": "index.js",
   "exports": "./index.js",
   "scripts": {
-    "start": "NODE_ENV=production node server/server.js",
+    "start": "NODE_ENV=production node -r dotenv/config server/server.js",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon server/server.js"
+    "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon -r dotenv/config server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "nodemonConfig": {
-    "ignore": [
-      "build",
-      "client"
-    ]
-  },
-  "author": "Robin Zhang, Cheri Friench, Justin Reyes, Chris Bock",
-  "license": "ISC",
+  "author": "Diana Alokhina, Mitchell Wen, Omar Mirza, Hee Je (Darryl) Joo, Jessica Grant",
+  "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
     "bcryptjs": "^2.4.3",
