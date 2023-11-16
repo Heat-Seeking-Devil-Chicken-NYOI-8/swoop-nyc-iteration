@@ -9,4 +9,8 @@ router.post('/', listingController.getListings, cookieController.setCookie, (req
   return res.status(200).json(res.locals.data);
 });
 
+router.post('/addListing', listingController.addListing, (req, res) => {
+  return res.status(200).json(res.locals.data);
+});
+
 module.exports = router;
