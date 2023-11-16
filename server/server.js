@@ -19,7 +19,6 @@ app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
-
 /******************************ACTIONS**************************************** */
 // handle API calls
 app.use('/api', googleMapsRouter);

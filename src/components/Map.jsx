@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setNavPosition } from "../mainSlice";
-import { Box } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNavPosition } from '../mainSlice';
+import { Box } from '@mui/material';
 import { Loader } from '@googlemaps/js-api-loader';
 
 export default function Map() {
   /*************************STATES******************************************* */
   const [map, setMap] = useState(null); // State to hold the map instance
   const [zip, setZip] = useState('');
-  
+
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
-  
+
   /***************************USE EFFECT***************************************** */
   //Set-up initial map of first render
   useEffect(() => {
@@ -23,14 +23,14 @@ export default function Map() {
     loader.importLibrary('core').then(() => {
       // Initialize the map on a DOM element with id of 'map' that is created on first render
       const newMap = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 10,
+        center: { lat: 40.75368539999999, lng: -73.9991637 },
+        zoom: 12,
       });
       //store the map as a state so it can be referenced outside
       setMap(newMap);
     });
   }, []);
-  
+
   /****************************HANDLER FUNCTIONS************************************ */
   //Create a random marker on the map
   function addMarker() {
@@ -40,12 +40,12 @@ export default function Map() {
       position: { lat: x, lng: y },
       map: map,
     });
-    
+
     newMarker.addListener('click', () => {
       alert('i am here');
     });
   }
-  
+
   //Send zip to back end to recenter map
   function zipCenter(e) {
     e.preventDefault();
@@ -67,7 +67,7 @@ export default function Map() {
   /***********************************RENDER COMPONENT************************************** */
   return (
     <div>
-      <div id="map" style={{ height: '50%', width: '100%' }}></div>
+      <div id="map" style={{ height: '80vh', width: '100%' }}></div>
       <button onClick={addMarker} style={{ border: '1px solid red' }}>
         add
       </button>
@@ -82,7 +82,3 @@ export default function Map() {
     </div>
   );
 }
-
-
-
-
