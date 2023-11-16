@@ -37,7 +37,7 @@ export default function App() {
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
           <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
             <Routes>
-              <Route path="/" element={<ViewListing />} />
+              <Route path="/" element={<Browse />} />
               <Route path="/upload" element={<Upload />} />
               <Route path="/map" element={<Map />} />
               <Route path="/previewlisting" element={<PreviewListing />} />

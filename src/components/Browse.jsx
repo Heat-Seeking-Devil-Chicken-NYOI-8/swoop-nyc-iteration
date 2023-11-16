@@ -6,6 +6,7 @@ import {
   AppBar,
   Box,
   Toolbar,
+  TextField,
   Typography,
   IconButton,
   Drawer,
@@ -13,11 +14,14 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Autocomplete
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import TuneIcon from "@mui/icons-material/Tune";
+import SearchIcon from '@mui/icons-material/Search';
 import Chip from "@mui/material/Chip";
+
 
 export default function Browse() {
   const state = useSelector((state) => state.main);
@@ -25,15 +29,17 @@ export default function Browse() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const listings = state.listings;
+
   const listingBundle = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < listings.length; i++) {
     listingBundle.push(
       <Paper sx={{ marginBottom: "20" }}>
         <Box display="flex" onClick={() => navigate("/viewlisting")}>
           <Box padding="10" flex="0 0 auto" width="33%">
             <img
               className="squareImg"
-              src="https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i7FG2r.AIA_Y/v0/940x529.jpg"
+              src={listings[i].url}
             />
           </Box>
           <Box
@@ -52,24 +58,43 @@ export default function Browse() {
             </Typography>
             {/* <Chip label="0.3 mi away" size="small" /> */}
             <Typography variant="body1" color="inherit" component="div">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum.
+              {listings[i].description}
             </Typography>
           </Box>
         </Box>
       </Paper>
     );
   }
+  /************ Populating tags ***************/
+  // declare fnc getTags to pull tags from listings (mock listings for now)
+  const getTags = (listings) => {
+    // initialize a Set to hold tags.
+    const output = new Set()
+    // iterate through tags in each item, adding all tags to the set before returning the set.
+    for (let item of listings) {
+      for (let tag of item.tags) {
+        output.add(tag);
+      }
+    }
+    // console.log(output)
+    return output;
+  }
+  const mockTagsSet = getTags(listings);
+  const mockTags = [...mockTagsSet]
+  /********************************************/
+
+  /*********** Searching by Tags **************/
+  const searchByTags = (listings) => {
+    // console.log("hello!")
+
+  }
+  /********************************************/
+
 
   return (
     <>
       <Box sx={{ backgroundColor: "#eee" }}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" height="1.5rem">
           <Toolbar variant="dense">
             <IconButton
               edge="start"
@@ -94,10 +119,37 @@ export default function Browse() {
                 </ListItem>
               </List>
             </Drawer>
+            <Autocomplete
+              multiple
+              id="search-tags"
+              options={mockTags}
+              freeSolo
+              renderTags={(value, getTagProps) => {
+                // console.log(value)
+                // console.log(getTagProps)
+                return value.map((option, index) => {
+                  console.log("map: option, index", option, index);
+                  return <Chip variant="filled" label={option} {...getTagProps({ index })} size="small" />
+                })
+              }}
+              renderInput={(params) => {
+                // console.log("renderInput params: ", params)
+                return <TextField
+                  {...params}
+                  variant="filled"
+                  placeholder="Search By Tags"
+                  size="small"
+                />
+              }}
+              sx={{
+                backgroundColor: "white",
+                margin: "10px",
+                width: "100%;"
 
-            <Typography variant="h6" color="inherit" component="div">
-              Browse Listings
-            </Typography>
+              }}
+              size="small"
+            />
+            <SearchIcon sx={{ marginLeft: "3px" }} />
           </Toolbar>
         </AppBar>
         <Box
