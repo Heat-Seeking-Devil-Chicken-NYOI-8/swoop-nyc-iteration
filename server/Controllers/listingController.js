@@ -9,17 +9,15 @@ const coordinates = [
   { name: 'Brooklyn Bridge', lat: 40.706086, lng: -73.996864 }, // Brooklyn Bridge
 ];
 
-
 listingController.getListings = (req, res, next) => {
   const query = ''; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
-  console.log(req.body);
   res.locals.data = coordinates;
   return next();
-  return next({
-    log: `controller.getListings: ${e}`,
-    status: 500,
-    message: { err: 'An error occurred. See log for details.' },
-  });
+  // return next({
+  //   log: `controller.getListings: ${e}`,
+  //   status: 500,
+  //   message: { err: 'An error occurred. See log for details.' },
+  // });
 };
 
 listingController.addListing = async (req, res, next) => {

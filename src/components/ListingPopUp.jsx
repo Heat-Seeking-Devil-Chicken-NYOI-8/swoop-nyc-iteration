@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ListingPopUp = () => {
+const ListingPopUp = ({ name }) => {
   return (
     <div
       className="listingPopUp"
@@ -11,6 +11,7 @@ const ListingPopUp = () => {
         background: 'yellow',
       }}
     >
+      <b >{name}</b>
       <img src="https://i.imgur.com/f7VXJQF.jpeg" width="100%" />
     </div>
   );

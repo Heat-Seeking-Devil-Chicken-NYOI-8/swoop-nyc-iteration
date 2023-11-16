@@ -49,26 +49,33 @@ export default function Map() {
   }, []);
 
   //update the listings based on location
+  const fetchListings = async () => {
+    return fetch('/listing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([1, 1]),
+    });
+  };
+
   useEffect(() => {
     //setup code
-    fetch('/listing/get', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(center),
-    })
+    fetchListings()
       //data to get back should be an array of objects {name:, lat:, lng}
       .then((data) => data.json())
+      .catch(() => console.log('i failed here'))
       .then((data) => {
         data.forEach((el) => {
           addMarker(el.name, el.lat, el.lng, map);
         });
       })
       .catch(() => console.log('error setting markers'));
-    //cleanupCode
+    //cleanupCode: removes old markers
     return () => {
-      console.log(markerList);
+      // console.log(`before: ${markerList}`);
+      while (markerList.length != 0) {
+        markerList.pop().setMap(null);
+      }
+      // console.log(`after: ${markerList}`);
     };
   }, [center]);
   /****************************HANDLER FUNCTIONS************************************ */
@@ -79,19 +86,19 @@ export default function Map() {
   function addMarker(name, lat, lng, map) {
     const newMarker = new google.maps.Marker({
       //position: { lat: x, lng: y },
-      position: { lat: coordinate.lat, lng: coordinate.lng },
+      position: { lat: lat, lng: lng },
       map: map,
     });
 
     //create an infowindow to be attached to the specified marker
     const infowindow = new google.maps.InfoWindow({});
-
+    let tempdiv;
     //onclick event of the marker which will open up a listingpopup
     newMarker.addListener('click', () => {
       //create an empty div to be put into the infowindow and store that element in a temporary variable
-      const tempdiv = document.createElement('div');
+      tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
-      ReactDOM.render(<ListingPopUp />, tempdiv);
+      ReactDOM.render(<ListingPopUp name={name}/>, tempdiv);
       //set the contents of the inforwindow to the div now containing the ListingPopUp
       //infowindow content takes in a string, or a dom element. NOT A REACT COMPONENT
       infowindow.setContent(tempdiv);
@@ -103,11 +110,11 @@ export default function Map() {
       });
     });
     //add event listener to unmount the listing popup to not clutter the dom and end the react component lifecycle
-    infowindow.addeventListener('closeClick', () => {
+    infowindow.addListener('closeclick', () => {
       console.log('unmounting');
       ReactDOM.unmountComponentAtNode(tempdiv);
     });
-    //add the marker to the markerList array
+    //add the marker to the markerList array for reference to be cleaned up later
     markerList.push(newMarker);
   }
 
