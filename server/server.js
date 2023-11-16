@@ -9,19 +9,24 @@ app.use(express.json());
 
 /****************************ROUTER IMPORT******************************************* */
 const googleMapsRouter = require('./Routers/googleMapsRouter.js');
-//const listingsRouter = require('./Routers/listingRouter.js');
+const listingRouter = require('./Routers/listingRouter.js');
 
 /***********************HANDLING STATIC FILES********************************************* */
 // handle requests from static files
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
 
+app.get('/map', (req, res) => {
+  res.redirect('/');
+});
 // route handler to respond with main app
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
+
 /******************************ACTIONS**************************************** */
 // handle API calls
 app.use('/api', googleMapsRouter);
+app.use('/listing', listingRouter);
 
 /********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route
