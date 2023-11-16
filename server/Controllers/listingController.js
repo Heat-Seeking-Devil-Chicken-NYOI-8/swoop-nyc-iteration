@@ -23,9 +23,9 @@ listingController.getListings = (req, res, next) => {
 
 listingController.addListing = async (req, res, next) => {
   const { url, lat, lng, tags, description } = req.body;
-  const query = ''; // TO DO: return {_id, creation_date}
+  const query = 'INSERT INTO listings (url, lat, lng, tags, description) VALUES ($1, $2, $3, $4, $5) RETURNING (_id, creation_date)'; // TO DO: return {_id, creation_date}
   try {
-    const data = await db.query(query);
+    const data = await db.query(query, [url, lat, lng, tags, description]);
     res.locals.data = data.rows;
     next();
   } catch (e) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setNavPosition } from "../mainSlice";
+import { setNavPosition, addNewListing } from "../mainSlice";
 import { Box } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -48,6 +48,28 @@ export default function PreviewListing() {
     });
   }
 
+  const formSubmit = async (e) => {
+    e.preventDefault(); // prevent page reload on submit
+    const tags = e.target[0].value.split(" ");
+    const description = e.target[2].value;
+
+    const postData = {
+      url: state.newListingPhoto.url,
+      lat: state.newListingPhoto.lat,
+      lng: state.newListingPhoto.lng,
+      tags: tags,
+      description: description,
+    };
+    fetch("/api/addListing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postData),
+    })
+      .then((data) => data.json()) // data = {_id, creation_date}
+      .then((data) => dispatch(addNewListing({ ...data, ...postData })))
+      .catch((err) => console.log("Error posting listing: ", err));
+  };
+
   return (
     <>
       <Box
@@ -57,6 +79,8 @@ export default function PreviewListing() {
         textAlign="center"
         alignItems="center"
         padding="0 50"
+        component="form"
+        onSubmit={formSubmit}
       >
         <br />
         <Typography variant="h5">Create Listing</Typography>
@@ -131,6 +155,7 @@ export default function PreviewListing() {
             variant="contained"
             size="small"
             sx={{ margin: "0 10 20 10", padding: "10", width: "100" }}
+            type="submit"
           >
             Post
           </Button>
