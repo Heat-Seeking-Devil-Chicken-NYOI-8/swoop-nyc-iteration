@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setNavPosition } from "../mainSlice";
+import { setActiveListing, setNavPosition } from "../mainSlice";
 import {
   AppBar,
   Box,
@@ -13,6 +13,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemButton,
   Paper,
   Autocomplete
 } from "@mui/material";
@@ -35,14 +36,19 @@ export default function Browse() {
   for (let i = 0; i < listings.length; i++) {
     listingBundle.push(
       <Paper sx={{ marginBottom: "20" }}>
-        <Box display="flex" onClick={() => navigate("/viewlisting")}>
+        <Box display="flex" listid={listings[i]._id} onClick={(e) => {
+          dispatch(setActiveListing(e.target.getAttribute("listid")));
+          navigate("/viewlisting")
+        }}>
           <Box padding="10" flex="0 0 auto" width="33%">
             <img
+              listid={listings[i]._id}
               className="squareImg"
               src={listings[i].url}
             />
           </Box>
           <Box
+            listid={listings[i]._id}
             padding="10"
             flex="1"
             fontSize="20"
@@ -68,27 +74,61 @@ export default function Browse() {
   /************ Populating tags ***************/
   // declare fnc getTags to pull tags from listings (mock listings for now)
   const getTags = (listings) => {
-    // initialize a Set to hold tags.
-    const output = new Set()
+    // initialize a Obj to hold tags.
+    const output = {}
     // iterate through tags in each item, adding all tags to the set before returning the set.
     for (let item of listings) {
       for (let tag of item.tags) {
-        output.add(tag);
+        if (!output[tag]) {
+          output[tag] = 1;
+        }
+        else output[tag]++;
       }
     }
     // console.log(output)
     return output;
   }
-  const mockTagsSet = getTags(listings);
-  const mockTags = [...mockTagsSet]
-  /********************************************/
+  const mockTagsObj = getTags(listings);
+  // array of tags
+  const mockTags = Object.keys(mockTagsObj)
+
 
   /*********** Searching by Tags **************/
   const searchByTags = (listings) => {
     // console.log("hello!")
 
+
+
   }
-  /********************************************/
+
+  /********** Sort tags by frequency **********/
+  // takes in object of tags with frequencies
+  const sortTags = (tags) => {
+    const output = [];
+    for (let tag in tags) {
+      const temp = [];
+      temp.push(tag, tags[tag])
+      output.push(temp)
+    }
+    output.sort((a, b) => b[1] - a[1]);
+    return output;
+  }
+
+  /********** Populating list items to render**********/
+  const tagListItems = [];
+
+  const populateTagList = (listOfTags) => {
+    for (let tag of listOfTags) {
+      tagListItems.push(
+        <ListItemButton>
+          <ListItemText primary={`${tag[0]} (${tag[1]})`} />
+        </ListItemButton>)
+    }
+  }
+  populateTagList(sortTags(mockTagsObj));
+
+
+  /********** Handle click on listing **********/
 
 
   return (
@@ -114,9 +154,7 @@ export default function Browse() {
               onClose={() => setIsOpen(false)}
             >
               <List>
-                <ListItem button component="a" href={""}>
-                  <ListItemText primary="Placeholder" />
-                </ListItem>
+                {tagListItems}
               </List>
             </Drawer>
             <Autocomplete
@@ -158,7 +196,7 @@ export default function Browse() {
           justifyContent="center"
           alignItems="center"
           margin="20"
-          style={{ padding: "50px 0px" }}
+          style={{ padding: "70px 0px" }}
         >
           {listingBundle}
         </Box>
