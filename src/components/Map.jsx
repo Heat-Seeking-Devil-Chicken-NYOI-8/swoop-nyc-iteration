@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNavPosition } from '../mainSlice';
 import { Box } from '@mui/material';
 import { Loader } from '@googlemaps/js-api-loader';
 import { link } from 'react-router-dom';
+import ListingPopUp from './ListingPopUp.jsx';
 
 export default function Map() {
   /****************************************STATES******************************************* */
@@ -38,18 +40,23 @@ export default function Map() {
     const x = Math.random() * 180 - 90;
     const y = Math.random() * 360 - 180;
     const newMarker = new google.maps.Marker({
-      position: { lat: x, lng: y },
+      //position: { lat: x, lng: y },
+      position: { lat: 40.75368539999999, lng: -73.9991637 },
       map: map,
     });
 
     const infowindow = new google.maps.InfoWindow({
-      content: '<a href="http://google.com">help</a>',
+      //content: '<a href="http://google.com">help</a>',
+      //content: `<ListingPopUp />`,
     });
 
-    newMarker.addListener('click', (e) => {
-      let top = e.pixel.x;
-      let left = e.pixel.y;
-      console.log('open');
+    newMarker.addListener('click', () => {
+      //create an empty div to be put into the infowindow
+      const tempdiv = document.createElement('div');
+      //ReactDOM.render(<ListingPopUp />, tempdiv);
+      ReactDOM.render(<ListingPopUp />, tempdiv);
+      infowindow.setContent(tempdiv);
+
       infowindow.open({
         anchor: newMarker,
         map: map,
