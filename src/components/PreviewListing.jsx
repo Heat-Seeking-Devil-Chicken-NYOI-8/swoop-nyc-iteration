@@ -27,10 +27,11 @@ export default function PreviewListing() {
         alignItems="center"
         padding="0 50"
       >
-        <Typography variant="h4">Preview Listing</Typography>
+        <br />
+        <Typography variant="h5">Preview Listing</Typography>
         <br />
         <Box alignContent="center">
-          <img className="squareImg" src="https://i.imgur.com/f7VXJQF.jpeg" />
+          <img className="squareImg" src={state.newListingPhoto.url} />
         </Box>
 
         <Box margin="10 0">
@@ -65,7 +66,13 @@ export default function PreviewListing() {
           <Button
             variant="contained"
             size="small"
-            sx={{ margin: "0 10 20 10", padding: "10", width: "100" }}
+            sx={{
+              margin: "0 10 20 10",
+              padding: "10",
+              width: "100",
+              backgroundColor: "#ccc",
+              color: "333",
+            }}
           >
             Cancel
           </Button>

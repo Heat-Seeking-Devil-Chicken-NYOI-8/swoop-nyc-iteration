@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import TuneIcon from "@mui/icons-material/Tune";
 import Chip from "@mui/material/Chip";
 
 export default function Browse() {
@@ -77,7 +78,7 @@ export default function Browse() {
               sx={{ mr: 2 }}
               onClick={() => setIsOpen(true)}
             >
-              <FilterAltIcon />
+              <TuneIcon />
             </IconButton>
 
             {/* Swappable Drawer */}
