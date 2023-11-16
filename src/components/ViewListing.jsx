@@ -8,6 +8,7 @@ import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspace
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import { Loader } from "@googlemaps/js-api-loader";
+import { act } from "react-test-renderer";
 
 export default function ViewListing() {
   const state = useSelector((state) => state.main);
@@ -21,6 +22,28 @@ export default function ViewListing() {
     });
     createMap({ lat: 40.706086, lng: -73.996864 }, "listingMap", loader); // createMap where div id="listingMap"
   }, []);
+
+
+  /********* Determine which listing to render to page ***********/
+  const activeListing = state.activeListing;
+  const listings = state.listings;
+  // console.log(listings)
+  // console.log(typeof activeListing);
+  const listingToRender = [];
+
+  const getListingById = (listingId) => {
+    for (let listing of listings) {
+      if (listing._id === parseInt(listingId)) {
+        listingToRender.push(<Box alignContent="center">
+          <img className="squareImg" src={listing.url} />
+        </Box>)
+        return;
+      }
+    }
+  }
+
+  getListingById(activeListing);
+
 
   async function createMap(center, div, loader) {
     loader.importLibrary("core").then(() => {
@@ -36,6 +59,8 @@ export default function ViewListing() {
       });
     });
   }
+
+
 
 
 
@@ -66,10 +91,7 @@ export default function ViewListing() {
             Back
           </Button>
         </Box>
-        <Box alignContent="center">
-          <img className="squareImg" src="https://i.imgur.com/f7VXJQF.jpeg" />
-        </Box>
-
+        {listingToRender}
         <Box margin="10 0">
           <Chip label="Chair" sx={{ padding: "0 5", margin: "5" }} />
           <Chip label="Blue" sx={{ padding: "0 5", margin: "5" }} />
