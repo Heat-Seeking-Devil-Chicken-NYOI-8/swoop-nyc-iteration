@@ -35,7 +35,7 @@ export default function Browse() {
             padding="10"
             flex="1"
             fontSize="20"
-            height="150px"
+            height="120px"
             overflow={"hidden"}
             sx={{
               maskImage:
@@ -59,46 +59,48 @@ export default function Browse() {
 
   return (
     <>
-      <AppBar position="fixed">
-        <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={() => setIsOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+      <Box sx={{ backgroundColor: "#eee" }}>
+        <AppBar position="fixed">
+          <Toolbar variant="dense">
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={() => setIsOpen(true)}
+            >
+              <MenuIcon />
+            </IconButton>
 
-          {/* Swappable Drawer */}
-          <Drawer
-            anchor="left"
-            size="sm"
-            open={isOpen}
-            onClose={() => setIsOpen(false)}
-          >
-            <List>
-              <ListItem button component="a" href={""}>
-                <ListItemText primary="Placeholder" />
-              </ListItem>
-            </List>
-          </Drawer>
+            {/* Swappable Drawer */}
+            <Drawer
+              anchor="left"
+              size="sm"
+              open={isOpen}
+              onClose={() => setIsOpen(false)}
+            >
+              <List>
+                <ListItem button component="a" href={""}>
+                  <ListItemText primary="Placeholder" />
+                </ListItem>
+              </List>
+            </Drawer>
 
-          <Typography variant="h6" color="inherit" component="div">
-            Browse Listings
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        margin="20"
-        style={{ padding: "50px 0px" }}
-      >
-        {listingBundle}
+            <Typography variant="h6" color="inherit" component="div">
+              Browse Listings
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          margin="20"
+          style={{ padding: "50px 0px" }}
+        >
+          {listingBundle}
+        </Box>
       </Box>
     </>
   );
