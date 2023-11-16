@@ -13,25 +13,23 @@ export default function Upload() {
   // const supabaseKey = process.env.REACT_APP_SUPABASE;
   // const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // const url = async(image)
-  //   //add image to supabase and get the URL back, add the URL to the request body
-  //   try{
-  //     //upload image
-  //     const {data, error} = await supabase
+  // const url = async (image) => {
+  //   // Upload image to supabase and get the URL back
+  //   try {
+  //     const { data, error } = await supabase
   //       .storage
-  //       .from('item-image')
-  //       .upload(item.image.name, item.image)
+  //       .from('images')
+  //       .upload(image.name, image)
 
-  //     //get the url from the uploaded image
-  //     const imageUrl = await supabase
-  //       .storage
-  //       .from('item-image')
-  //       .getPublicUrl(item.image.name)
+  //     const imageUrl = await supabase.storage
+  //       .from("images")
+  //       .getPublicUrl(image);
 
-  //       //update value of item.image to the string of the url
-  //       item.image = imageUrl.data.publicUrl;
-  //       console.log('data received from image upload', imageUrl.data.publicUrl);
-  //   } catch (err) {console.log(err);}
+  //     return imageUrl.data.publicUrl;
+  //   } catch (err) {
+  //     return console.log(err);
+  //   }
+  // };
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
