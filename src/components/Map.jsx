@@ -3,16 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setNavPosition } from '../mainSlice';
 import { Box } from '@mui/material';
 import { Loader } from '@googlemaps/js-api-loader';
+import { link } from 'react-router-dom';
 
 export default function Map() {
-  /*************************STATES******************************************* */
+  /****************************************STATES******************************************* */
   const [map, setMap] = useState(null); // State to hold the map instance
   const [zip, setZip] = useState('');
 
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
 
-  /***************************USE EFFECT***************************************** */
+  /**************************************USE EFFECT***************************************** */
   //Set-up initial map of first render
   useEffect(() => {
     const loader = new Loader({
@@ -41,16 +42,24 @@ export default function Map() {
       map: map,
     });
 
-    newMarker.addListener('click', () => {
-      alert('i am here');
+    const infowindow = new google.maps.InfoWindow({
+      content: '<a href="http://google.com">help</a>',
+    });
+
+    newMarker.addListener('click', (e) => {
+      let top = e.pixel.x;
+      let left = e.pixel.y;
+      console.log('open');
+      infowindow.open({
+        anchor: newMarker,
+        map: map,
+      });
     });
   }
 
   //Send zip to back end to recenter map
   function zipCenter(e) {
     e.preventDefault();
-    console.log(zip);
-    console.log(map.getBounds());
     fetch('/api/setCenter', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -59,7 +68,6 @@ export default function Map() {
       //expected data to be {lon: , lat:}
       .then((data) => data.json())
       .then((data) => {
-        console.log(data);
         map.setCenter(data);
       })
       .catch(() => console.log('could not set center'));
