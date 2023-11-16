@@ -8,6 +8,8 @@ export default function GetLocation() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
   const [inputInvalid, setInputInvalid] = useState(true)
+  const [buttonDisabled, setButtonDisabled] = useState(true)
+
   useEffect(() => {
     setInputInvalid(false)
   }, [])
@@ -30,8 +32,12 @@ export default function GetLocation() {
     if (e.target.value.length === 0) setInputInvalid(false)
     if (!parseInt(e.target.value) || e.target.value.length !== 5) {
       setInputInvalid(true);
+      setButtonDisabled(true)
     }
-    else setInputInvalid(false);
+    else {
+      setInputInvalid(false)
+      setButtonDisabled(false)
+    };
   }
 
   // PROTIP FROM ROBIN:
@@ -47,11 +53,12 @@ export default function GetLocation() {
     >
       <Typography variant="h2" textAlign={"center"} sx={{ margin: "10px" }}>Swoop <br /> NYC</Typography>
       <TextField
+        id="zipCodeInput"
         label="Enter Your Zip Code"
         sx={{ margin: "10px", textAlign: "center" }}
         error={inputInvalid}
         onChange={(e) => checkZipCode(e)}></TextField>
-      <Button variant="outlined" sx={{ margin: "10px" }} onClick={(e) => { dispatchLocation(e) }}>Swoop!</Button>
+      <Button id="zipCodeSubmit" variant="outlined" sx={{ margin: "10px" }} disabled={buttonDisabled} onClick={(e) => { dispatchLocation(e) }}>Swoop!</Button>
     </Box >
 
   );
