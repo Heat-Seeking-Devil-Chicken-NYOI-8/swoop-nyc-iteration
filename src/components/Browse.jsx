@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setNavPosition } from "../mainSlice";
 import {
   AppBar,
@@ -14,17 +15,21 @@ import {
   Paper,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import TuneIcon from "@mui/icons-material/Tune";
+import Chip from "@mui/material/Chip";
 
 export default function Browse() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const listingBundle = [];
   for (let i = 0; i < 10; i++) {
     listingBundle.push(
       <Paper sx={{ marginBottom: "20" }}>
-        <Box display="flex">
+        <Box display="flex" onClick={() => navigate("/viewlisting")}>
           <Box padding="10" flex="0 0 auto" width="33%">
             <img
               className="squareImg"
@@ -35,13 +40,17 @@ export default function Browse() {
             padding="10"
             flex="1"
             fontSize="20"
-            height="150px"
+            height="120px"
             overflow={"hidden"}
             sx={{
               maskImage:
                 "linear-gradient(to bottom, black calc(100% - 50px), transparent 100%)",
             }}
           >
+            <Typography variant="body2" color="green" component="div">
+              ● 0.3 mi away
+            </Typography>
+            {/* <Chip label="0.3 mi away" size="small" /> */}
             <Typography variant="body1" color="inherit" component="div">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -59,46 +68,48 @@ export default function Browse() {
 
   return (
     <>
-      <AppBar position="fixed">
-        <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={() => setIsOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
+      <Box sx={{ backgroundColor: "#eee" }}>
+        <AppBar position="fixed">
+          <Toolbar variant="dense">
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={() => setIsOpen(true)}
+            >
+              <TuneIcon />
+            </IconButton>
 
-          {/* Swappable Drawer */}
-          <Drawer
-            anchor="left"
-            size="sm"
-            open={isOpen}
-            onClose={() => setIsOpen(false)}
-          >
-            <List>
-              <ListItem button component="a" href={""}>
-                <ListItemText primary="Placeholder" />
-              </ListItem>
-            </List>
-          </Drawer>
+            {/* Swappable Drawer */}
+            <Drawer
+              anchor="left"
+              size="sm"
+              open={isOpen}
+              onClose={() => setIsOpen(false)}
+            >
+              <List>
+                <ListItem button component="a" href={""}>
+                  <ListItemText primary="Placeholder" />
+                </ListItem>
+              </List>
+            </Drawer>
 
-          <Typography variant="h6" color="inherit" component="div">
-            Browse Listings
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        margin="20"
-        style={{ padding: "50px 0px" }}
-      >
-        {listingBundle}
+            <Typography variant="h6" color="inherit" component="div">
+              Browse Listings
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          margin="20"
+          style={{ padding: "50px 0px" }}
+        >
+          {listingBundle}
+        </Box>
       </Box>
     </>
   );
