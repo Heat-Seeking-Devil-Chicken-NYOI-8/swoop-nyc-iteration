@@ -1,28 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { setNavPosition } from '../mainSlice';
+import { setNavPosition, initializeListings } from '../mainSlice';
 import { Box } from '@mui/material';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
 import PreviewListing from './PreviewListing.jsx';
-
-const coordinates = [
-  [40.758896, -73.98513], // Times Square
-  [40.785091, -73.968285], // Central Park
-  [40.689247, -74.044502], // Statue of Liberty
-  [40.748817, -73.985428], // Empire State Building
-  [40.706086, -73.996864], // Brooklyn Bridge
-];
+import { store } from '../store.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Map() {
   /****************************************STATES******************************************* */
   const [map, setMap] = useState(null); // State to hold the map instance
   const [center, setCenter] = useState([]); //State to hold the current center as an array [lat,lng]
-  const [listings, setListing] = useState([]);
 
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let markerList = [];
   /**************************************USE EFFECT***************************************** */
@@ -84,8 +78,10 @@ export default function Map() {
       .then((data) => data.json())
       .catch(() => console.log('i failed here'))
       .then((data) => {
-        data.forEach((el) => {
-          addMarker(el.name, el.lat, el.lng, map);
+        console.log(data.rows);
+        data.rows.forEach((el) => {
+          initializeListings(data);
+          addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
         });
       })
       .catch(() => console.log('error setting markers'));
@@ -93,11 +89,11 @@ export default function Map() {
   //Create a random marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
+  //@Params {string} -url
   //@Params {map} -  map : google maps object to place marker on
-  function addMarker(name, lat, lng, map) {
+  function addMarker(name, lat, lng, url, _id, map) {
     const newMarker = new google.maps.Marker({
-      //position: { lat: x, lng: y },
-      position: { lat: lat, lng: lng },
+      position: { lat: parseFloat(lat), lng: parseFloat(lng) },
       map: map,
     });
 
@@ -109,7 +105,12 @@ export default function Map() {
       //create an empty div to be put into the infowindow and store that element in a temporary variable
       tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
-      ReactDOM.render(<ListingPopUp name={name} />, tempdiv);
+      ReactDOM.render(
+        <Provider store={store}>
+          <ListingPopUp name={name} url={url} _id={_id} />
+        </Provider>,
+        tempdiv
+      );
       //set the contents of the inforwindow to the div now containing the ListingPopUp
       //infowindow content takes in a string, or a dom element. NOT A REACT COMPONENT
       infowindow.setContent(tempdiv);
