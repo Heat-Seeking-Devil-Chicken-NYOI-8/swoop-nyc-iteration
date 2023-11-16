@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setNavPosition, savePhoto } from "../mainSlice";
-import { Box, Typography, Button, Icon } from "@mui/material";
+import { Box, Typography, Button, Icon, Input } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { Upgrade } from "@mui/icons-material";
 import { createClient } from "@supabase/supabase-js";
@@ -39,28 +39,47 @@ export default function Upload() {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Button
+        component="label"
         sx={{
-          border: "5px dotted #ccc",
+          border: "1px dotted darkGray",
           minHeight: "82vh",
           minWidth: "83vw",
-          marginTop: "5vh",
+          marginTop: "3vh",
           marginX: "5vw",
-          color: "#999",
+          marginBottom: "6vh",
+          zIndex: "0",
         }}
       >
-        <Box>
-          <Upgrade sx={{ fontSize: "20vw", maxBlockSize: "130px" }} />
-          <br />
-          <Typography
-            variant="body2"
-            textAlign="center"
-            fontSize={"8vw"}
-            maxBlockSize="180px"
-          >
-            Upload
-            <br />
-            Photo
-          </Typography>
+        <Input
+          type="file"
+          id="uploadInput"
+          style={{
+            width: "1",
+            height: "1",
+            marginTop: "3vh",
+            marginX: "5vw",
+            marginBottom: "6vh",
+            visibility: "hidden",
+            zIndex: "2",
+            position: "absolute",
+          }}
+        />
+        <Box
+          paddingBottom={"5%"}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Upgrade
+            sx={{
+              fontSize: "20vw",
+              maxBlockSize: "130px",
+              color: "#EEE",
+              justifySelf: "center",
+            }}
+          ></Upgrade>
           <br />
           <input
             type="file"
