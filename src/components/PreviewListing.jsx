@@ -70,7 +70,6 @@ export default function PreviewListing() {
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
         dispatch(addNewListing({ ...data, ...postData }));
-        console.log("succesfully added");
         navigate("/");
       })
       .catch((err) => console.log("Error posting listing: ", err));
