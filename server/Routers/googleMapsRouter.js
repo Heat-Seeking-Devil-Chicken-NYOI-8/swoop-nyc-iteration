@@ -2,7 +2,7 @@ const express = require('express');
 const googleMapsController = require('../Controllers/googleMapsController');
 const router = express.Router();
 
-//sends back coordinates to center of zip code
+//gets zip code {"zip": } and sends back coordinates {lat:, lng:}
 router.post(
   '/setCenter',
   googleMapsController.getCoordinatesFromZip,

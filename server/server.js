@@ -4,12 +4,14 @@ const PORT = 3000;
 const path = require('path');
 const db = require('./model.js');
 
-const googleMapsRouter = require('./Routers/googleMapsRouter.js');
-//const listingsRouter = require('./Routers/listingRouter.js');
-
 // parse JSON from incoming requests
 app.use(express.json());
 
+/****************************ROUTER IMPORT******************************************* */
+const googleMapsRouter = require('./Routers/googleMapsRouter.js');
+//const listingsRouter = require('./Routers/listingRouter.js');
+
+/***********************HANDLING STATIC FILES********************************************* */
 // handle requests from static files
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
 
@@ -18,15 +20,17 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+/******************************ACTIONS**************************************** */
 // handle API calls
 app.use('/api', googleMapsRouter);
-// app.use('/listings', listingsRouter);
 
+/********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route
-app.get('*', (req, res) => {
+app.use('*', (req, res) => {
   return res.sendStatus(404);
 });
 
+/*********************************GLOBAL ERROR HANDLER************************************** */
 // global error handling middleware
 app.use((err, req, res, next) => {
   const defaultErr = {

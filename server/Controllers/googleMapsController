@@ -1,6 +1,7 @@
 const apiKey = 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4';
 const googleMapsController = {};
 
+//fetches from googleMaps
 googleMapsController.getCoordinatesFromZip = (req, res, next) => {
   const { zip } = req.body;
   fetch(
@@ -8,6 +9,7 @@ googleMapsController.getCoordinatesFromZip = (req, res, next) => {
   )
     .then((res) => res.json())
     .then((data) => {
+      //filters the data to onlt get {lat:, lng:}
       res.locals.data = data.results[0].geometry.location;
       return next();
     })
