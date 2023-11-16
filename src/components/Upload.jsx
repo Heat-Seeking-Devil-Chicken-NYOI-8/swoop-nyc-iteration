@@ -41,18 +41,20 @@ export default function Upload() {
       <Button
         component="label"
         sx={{
-          border: "1px dotted darkGray",
+          border: "5px dotted #ccc",
           minHeight: "82vh",
           minWidth: "83vw",
-          marginTop: "3vh",
+          marginTop: "5vh",
           marginX: "5vw",
-          marginBottom: "6vh",
-          zIndex: "0",
+          color: "#999",
         }}
       >
         <Input
           type="file"
-          id="uploadInput"
+          id="file"
+          name="file"
+          accept="image/png, image/jpeg"
+          onChange={handleFileChange}
           style={{
             width: "1",
             height: "1",
@@ -65,29 +67,25 @@ export default function Upload() {
           }}
         />
         <Box
-          paddingBottom={"5%"}
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Upgrade
-            sx={{
-              fontSize: "20vw",
-              maxBlockSize: "130px",
-              color: "#EEE",
-              justifySelf: "center",
-            }}
-          ></Upgrade>
+          <Upgrade sx={{ fontSize: "20vw", maxBlockSize: "130px" }} />
           <br />
-          <input
-            type="file"
-            id="file"
-            name="file"
-            accept="image/png, image/jpeg"
-            onChange={handleFileChange}
-          ></input>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            fontSize={"8vw"}
+            maxBlockSize="180px"
+          >
+            Upload
+            <br />
+            Photo
+          </Typography>
+          <br />
         </Box>
       </Button>
     </Box>
