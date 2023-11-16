@@ -6,7 +6,7 @@ export const mainSlice = createSlice({
         navPosition: 'Browse', // 'Browse' or 'Upload' or 'Map'
         location: { zip: '10001', lat: 40.713050, lng: -74.007230 }, // {zip, lat, lng}
         listings: [], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
-        newListingPhoto: {}, // { url: 'https://iqmxeqilgrwqfrwxzqfz.supabase.co/storage/v1/object/public/images/985688IMG_2910.JPG', lat: 40.713050, lng: -74.007230 }, // {url, lat, lng}
+        newListingPhoto: { url: 'https://iqmxeqilgrwqfrwxzqfz.supabase.co/storage/v1/object/public/images/985688IMG_2910.JPG', lat: 40.713050, lng: -74.007230 }, // {url, lat, lng}
         activeListing: '', // _id
         searchInput: '', // current text in search box
     },

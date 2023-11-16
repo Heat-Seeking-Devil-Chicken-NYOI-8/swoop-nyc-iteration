@@ -28,40 +28,56 @@ export default function PreviewListing() {
         padding="0 50"
       >
         <br />
-        <Typography variant="h5">Preview Listing</Typography>
+        <Typography variant="h5">Create Listing</Typography>
         <br />
         <Box alignContent="center">
           <img className="squareImg" src={state.newListingPhoto.url} />
         </Box>
 
-        <Box margin="10 0">
+        {/* <Box margin="10 0">
           <Chip label="Chair" sx={{ padding: "0 5", margin: "5" }} />
           <Chip label="Blue" sx={{ padding: "0 5", margin: "5" }} />
           <Chip label="Big chair" sx={{ padding: "0 5", margin: "5" }} />
           <Chip label="Blue chair" sx={{ padding: "0 5", margin: "5" }} />
           <Chip label="Blue" sx={{ padding: "0 5", margin: "5" }} />
+        </Box> */}
+
+        <Box marginTop="20" width="100%">
+          <TextField
+            multiline
+            fullWidth
+            required
+            id="tags"
+            label="Tags (space-separated)"
+            name="tags"
+            variant="standard"
+            // defaultValue="tag1 tag2 tag3 tag4 tag5"
+          ></TextField>
         </Box>
 
-        <Box
-          flexWrap="wrap"
-          marginTop="10px"
-          marginBottom="10px"
-          paddingLeft="2"
-        >
-          <Typography variant="body2">
-            hi this is the description of the item that is listed above
-            bcvdhjfzkbvx,cnjmnvdjf,nslac.masKXLs;ajefrkghjlsbd.nv
-            zmxc,bvskdjfhzdcskafielrsurbhjvdfjn.cskmdlwejiflshugv n
-            vbhdjcnjkdsjvbgvjnkdewjruhvjnfvbckjdf
-            vhgkbj,nk.bhjvghcfgdxsrftyguhbhvgfcfvbn,
-          </Typography>
+        <Box marginTop="20" width="100%">
+          <TextField
+            multiline
+            fullWidth
+            required
+            id="Description"
+            label="Description"
+            name="description"
+            variant="standard"
+            // defaultValue="hi this is the description of the item that is listed above
+            // bcvdhjfzkbvx,cnjmnvdjf,nslac.masKXLs;ajefrkghjlsbd.nv
+            // zmxc,bvskdjfhzdcskafielrsurbhjvdfjn.cskmdlwejiflshugv n
+            // vbhdjcnjkdsjvbgvjnkdewjruhvjnfvbckjdf
+            // vhgkbj,nk.bhjvghcfgdxsrftyguhbhvgfcfvbn"
+          />
         </Box>
 
         <Box
           display="flex"
           flexDirection="row"
           alignContent="space-between"
-          padding="10px"
+          padding="10"
+          marginTop="30"
         >
           <Button
             variant="contained"
