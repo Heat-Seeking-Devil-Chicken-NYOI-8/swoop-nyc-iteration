@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setNavPosition, addNewListing } from "../mainSlice";
 import { Box } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -17,6 +18,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 export default function PreviewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loader = new Loader({
@@ -60,7 +62,7 @@ export default function PreviewListing() {
       tags: tags,
       description: description,
     };
-    fetch("/api/addListing", {
+    fetch("/listing/addListing", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(postData),
@@ -68,6 +70,7 @@ export default function PreviewListing() {
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
         dispatch(addNewListing({ ...data, ...postData }));
+        console.log("succesfully added");
         navigate("/");
       })
       .catch((err) => console.log("Error posting listing: ", err));
