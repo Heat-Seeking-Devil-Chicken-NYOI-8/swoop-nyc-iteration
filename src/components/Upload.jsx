@@ -31,7 +31,7 @@ export default function Upload() {
 
     let { latitude, longitude } = await exifr.gps(file);
 
-    dispatch(savePhoto({ url, latitude, longitude }));
+    dispatch(savePhoto({ url, lat: latitude, lng: longitude }));
 
     navigate("/previewlisting");
   };
