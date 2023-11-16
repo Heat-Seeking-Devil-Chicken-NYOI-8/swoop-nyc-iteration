@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 const path = require('path');
@@ -6,6 +7,8 @@ const db = require('./model.js');
 
 // parse JSON from incoming requests
 app.use(express.json());
+app.use(express.urlencoded());
+app.use(cookieParser());
 
 /****************************ROUTER IMPORT******************************************* */
 const googleMapsRouter = require('./Routers/googleMapsRouter.js');

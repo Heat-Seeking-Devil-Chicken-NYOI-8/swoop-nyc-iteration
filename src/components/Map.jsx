@@ -33,7 +33,7 @@ export default function Map() {
       version: 'weekly',
     });
     // Load the Google Maps API library
-    loader.importLibrary('core', 'geometry').then(() => {
+    loader.importLibrary('core', 'geometry', 'places').then(() => {
       // Initialize the map on a DOM element with id of 'map' that is created on first render
       const newMap = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 40.75368539999999, lng: -73.9991637 },
@@ -46,7 +46,16 @@ export default function Map() {
         setCenter([newMap.getCenter().lat(), newMap.getCenter().lng()]);
       });
       //store the map as a state so it can be referenced outside
+      //replace the search bar with the google maps places api searchbar
+      console.log(google.maps);
+      // const mapSearch = new google.maps.places.SearchBox(
+      //   document.getElementById('location')
+      // );
       setMap(newMap);
+
+      // mapSearch.addListener('places_changed', () =>
+      //   console.log(mapSearch.getPlaces())
+      // );
     });
   }, []);
 
@@ -69,7 +78,7 @@ export default function Map() {
     fetch('/listing', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify([center]),
+      body: JSON.stringify(center),
     })
       //data to get back should be an array of objects {name:, lat:, lng}
       .then((data) => data.json())
@@ -81,7 +90,6 @@ export default function Map() {
       })
       .catch(() => console.log('error setting markers'));
   }
-  
   //Create a random marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
@@ -151,7 +159,7 @@ export default function Map() {
         center is lat:{center[0]} lng:{center[1]}
       </p>
       <form name="myForm" onSubmit={(e) => zipCenter(e)} method="POST">
-        <input type="text" name="zip" />
+        <input id="location" type="text" name="zip" />
         <input type="submit" value="Submit" />
       </form>
     </div>
