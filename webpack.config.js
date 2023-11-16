@@ -3,17 +3,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "index_bundle.js"
+    path: path.resolve(__dirname, './dist'),
+    filename: 'index_bundle.js',
   },
   target: 'web',
   devServer: {
     host: '0.0.0.0',
     // port: 8080 by default
     static: {
-      directory: path.join(__dirname, 'public')
+      directory: path.join(__dirname, 'public'),
     },
     proxy: {
       // need to list for every endpoint used
@@ -36,11 +36,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'public', 'index.html')
+      template: path.join(__dirname, 'public', 'index.html'),
     }),
   ],
   resolve: {
     // these files can be imported without specifying extension
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
   },
 };

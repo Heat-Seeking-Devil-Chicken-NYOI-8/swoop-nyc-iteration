@@ -1,23 +1,23 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import {
   Box,
   Paper,
   BottomNavigation,
   BottomNavigationAction,
   CssBaseline,
-} from "@mui/material";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import PlaceIcon from "@mui/icons-material/Place";
-import Browse from "./components/Browse";
-import GetLocation from "./components/GetLocation";
-import Map from "./components/Map";
-import PreviewListing from "./components/PreviewListing";
-import Upload from "./components/Upload";
-import ViewListing from "./components/ViewListing";
-import { setNavPosition } from "./mainSlice";
+} from '@mui/material';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import PlaceIcon from '@mui/icons-material/Place';
+import Browse from './components/Browse';
+import GetLocation from './components/GetLocation';
+import Map from './components/Map';
+import PreviewListing from './components/PreviewListing';
+import Upload from './components/Upload';
+import ViewListing from './components/ViewListing';
+import { setNavPosition } from './mainSlice';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ export default function App() {
   return (
     <Router>
       <CssBaseline />
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
           <Routes>
             <Route path="/" element={<Browse />} />
@@ -46,7 +46,7 @@ export default function App() {
         </Box>
 
         <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
           elevation={3}
         >
           <BottomNavigation
