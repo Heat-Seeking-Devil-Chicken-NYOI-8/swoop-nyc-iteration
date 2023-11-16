@@ -1,51 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNavPosition } from '../mainSlice';
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import FlagIcon from '@mui/icons-material/Flag';
-import Paper from '@mui/material/Paper';
-import FaceIcon from '@mui/icons-material/Face';
-import Face3Icon from '@mui/icons-material/Face3';
-import Face6Icon from '@mui/icons-material/Face6';
-import Face2Icon from '@mui/icons-material/Face2';
-import Avatar from '@mui/material/Avatar';
-import TextField from '@mui/material/TextField';
-import { Loader } from '@googlemaps/js-api-loader';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setNavPosition } from "../mainSlice";
+import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspaceOutlined";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import { Loader } from "@googlemaps/js-api-loader";
 
-//Each ViewListing will need to have a unique id and also a <div> with an id='${listingID}-map
 export default function ViewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  /************************************************************************* */
-  //create a static map
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
-      version: 'weekly',
+      apiKey: "AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4",
+      version: "weekly",
     });
-    createMap({ lat: 40.706086, lng: -73.996864 }, 'listingMap', loader);
+    createMap({ lat: 40.706086, lng: -73.996864 }, "listingMap", loader); // createMap where div id="listingMap"
   }, []);
 
-  /************************************************************ */
-  //create a map on the view listing at
-  //@Params {latlng} center
   async function createMap(center, div, loader) {
-    loader.importLibrary('core').then(() => {
-      //append an instance of google maps at a div with an ID of listingMap and center (lat,lng)
+    loader.importLibrary("core").then(() => {
       const newMap = new google.maps.Map(document.getElementById(div), {
-        center: center,
+        center: center, // {lat, lng}
         zoom: 15,
+        disableDefaultUI: true,
       });
       //add marker to the newly created map
       const newMarker = new google.maps.Marker({
-        //position: { lat: x, lng: y },
-        position: center,
+        position: center, // {lat, lng}
         map: newMap,
       });
     });
@@ -61,71 +47,68 @@ export default function ViewListing() {
         justifyContent="center"
         textAlign="center"
         alignItems="center"
+        padding="0 50"
+        marginBottom={"50"}
       >
-        <Box display="flex" alignItems="flexStart" sx={{ margin: '10px' }}>
+        <Box
+          display="flex"
+          textAlign="left"
+          alignItems="flexStart"
+          sx={{ margin: "20" }}
+        >
           <Button
-            variant="outlined"
+            variant="text"
             startIcon={<KeyboardBackspaceOutlinedIcon />}
             size="small"
-            sx={{ margin: '3px' }}
+            sx={{ marginRight: "230" }}
+            onClick={() => navigate("/")}
           >
             Back
           </Button>
         </Box>
-        <div style={{ display: 'flex' }}>
-          <Box display="flex" alignContent="center" sx={{ margin: '10px' }}>
-            <img src="https://i.imgur.com/f7VXJQF.jpeg" width="50%" />
-          </Box>
-          <div
-            id="listingMap"
-            style={{ height: '100%px', width: '100%' }}
-          ></div>
-        </div>
+        <Box alignContent="center">
+          <img className="squareImg" src="https://i.imgur.com/f7VXJQF.jpeg" />
+        </Box>
+
+        <Box margin="10 0">
+          <Chip label="Chair" sx={{ padding: "0 5", margin: "5" }} />
+          <Chip label="Blue" sx={{ padding: "0 5", margin: "5" }} />
+          <Chip label="Big chair" sx={{ padding: "0 5", margin: "5" }} />
+          <Chip label="Blue chair" sx={{ padding: "0 5", margin: "5" }} />
+          <Chip label="Blue" sx={{ padding: "0 5", margin: "5" }} />
+        </Box>
+
+        <Box display="flex" flexWrap="wrap" padding="10 0">
+          <Typography variant="body1" color="inherit" component="div">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </Typography>
+        </Box>
+
+        <Box width="100%" height={"200"} marginTop="20">
+          <div id="listingMap" style={{ height: "100%", width: "100%" }}></div>
+        </Box>
+
         <Box
           display="flex"
-          justifyContent="flexStart"
-          alignItems="flexStart"
-          sx={{ margin: '10px' }}
+          flexDirection="row"
+          alignContent="space-between"
+          padding="10px"
+          marginTop={"20"}
         >
-          <FlagIcon />
-        </Box>
-
-        <Box sx={{ marginTop: '10px' }}>
-          <Stack direction="row" spacing={1}>
-            <Chip label="Chair" sx={{ width: '100px' }} />
-            <Chip label="Blue" sx={{ width: '100px' }} />
-            <Chip label="Big chair" sx={{ width: '100px' }} />
-            <Chip label="Blue chair" sx={{ width: '100px' }} />
-          </Stack>
-        </Box>
-
-        <Box display="flex" flexDirection="column" sx={{ margin: '10px' }}>
-          <Typography variant="body2"> Comments </Typography>
-
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="flexStart"
-            sx={{ margin: '10px' }}
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              margin: "0 10 20 10",
+              padding: "10 20",
+              backgroundColor: "red",
+            }}
           >
-            <Box display="flex" flexDirection="row" sx={{ margin: '10px' }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Typography> Omar: </Typography>
-              <Typography> Cool couch!</Typography>
-            </Box>
-
-            <Box display="flex" flexDirection="row" sx={{ margin: '10px' }}>
-              <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              <Typography sx={{ marginLeft: '2px' }}> Jessica: </Typography>
-              <Typography> Beautiful couch </Typography>
-            </Box>
-
-            <Box display="flex" flexDirection="row" sx={{ margin: '10px' }}>
-              <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-              <Typography> Mitch: </Typography>
-              <Typography> omg great color! </Typography>
-            </Box>
-          </Box>
+            Mark as Taken
+          </Button>
         </Box>
       </Box>
     </>
