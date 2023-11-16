@@ -12,6 +12,7 @@ const coordinates = [
 listingController.getListings = (req, res, next) => {
   const query = ''; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
   res.locals.data = coordinates;
+  console.log('throttle');
   return next();
   // return next({
   //   log: `controller.getListings: ${e}`,

@@ -22,4 +22,13 @@ googleMapsController.getCoordinatesFromZip = (req, res, next) => {
     });
 };
 
+//filters data based on distance
+googleMapsController.distanceSelector = (req,res,next) => {
+  //request body is [lat,lng]
+  req.body
+  //data is an array of objects {name, lat, lng}
+res.locals.data.filter(el => el.lat, el.lng )
+
+}
+
 module.exports = googleMapsController;

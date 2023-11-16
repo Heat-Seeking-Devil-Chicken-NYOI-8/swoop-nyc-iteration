@@ -19,9 +19,11 @@ export default function Map() {
   /****************************************STATES******************************************* */
   const [map, setMap] = useState(null); // State to hold the map instance
   const [center, setCenter] = useState([]); //State to hold the current center as an array [lat,lng]
+  const [listings, setListing] = useState([]);
 
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+
   let markerList = [];
   /**************************************USE EFFECT***************************************** */
   //Set-up initial map of first render
@@ -31,7 +33,7 @@ export default function Map() {
       version: 'weekly',
     });
     // Load the Google Maps API library
-    loader.importLibrary('core').then(() => {
+    loader.importLibrary('core', 'geometry').then(() => {
       // Initialize the map on a DOM element with id of 'map' that is created on first render
       const newMap = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 40.75368539999999, lng: -73.9991637 },
@@ -49,17 +51,26 @@ export default function Map() {
   }, []);
 
   //update the listings based on location
-  const fetchListings = async () => {
-    return fetch('/listing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify([1, 1]),
-    });
-  };
-
   useEffect(() => {
     //setup code
-    fetchListings()
+    //throttling the fetch request
+    let timeID = setTimeout(fetchListings, 500);
+    //cleanupCode:
+    return () => {
+      clearTimeout(timeID);
+    };
+  }, [center]);
+  /****************************HANDLER FUNCTIONS************************************ */
+  function fetchListings() {
+    console.log('wait');
+    while (markerList.length != 0) {
+      markerList.pop().setMap(null);
+    }
+    fetch('/listing', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify([center]),
+    })
       //data to get back should be an array of objects {name:, lat:, lng}
       .then((data) => data.json())
       .catch(() => console.log('i failed here'))
@@ -69,16 +80,8 @@ export default function Map() {
         });
       })
       .catch(() => console.log('error setting markers'));
-    //cleanupCode: removes old markers
-    return () => {
-      // console.log(`before: ${markerList}`);
-      while (markerList.length != 0) {
-        markerList.pop().setMap(null);
-      }
-      // console.log(`after: ${markerList}`);
-    };
-  }, [center]);
-  /****************************HANDLER FUNCTIONS************************************ */
+  }
+  
   //Create a random marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
@@ -98,7 +101,7 @@ export default function Map() {
       //create an empty div to be put into the infowindow and store that element in a temporary variable
       tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
-      ReactDOM.render(<ListingPopUp name={name}/>, tempdiv);
+      ReactDOM.render(<ListingPopUp name={name} />, tempdiv);
       //set the contents of the inforwindow to the div now containing the ListingPopUp
       //infowindow content takes in a string, or a dom element. NOT A REACT COMPONENT
       infowindow.setContent(tempdiv);
@@ -119,6 +122,7 @@ export default function Map() {
   }
 
   //Send zip to back end to recenter map
+  //@params {event} - e : form event
   function zipCenter(e) {
     e.preventDefault();
     //get the zip value from the form
