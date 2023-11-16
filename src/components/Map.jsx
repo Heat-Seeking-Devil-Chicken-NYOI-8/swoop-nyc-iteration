@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { setNavPosition } from '../mainSlice';
-import { Box } from '@mui/material';
-import { Loader } from '@googlemaps/js-api-loader';
-import ListingPopUp from './ListingPopUp.jsx';
-import PreviewListing from './PreviewListing.jsx';
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { setNavPosition } from "../mainSlice";
+import { Box } from "@mui/material";
+import { Loader } from "@googlemaps/js-api-loader";
+import ListingPopUp from "./ListingPopUp.jsx";
+import PreviewListing from "./PreviewListing.jsx";
 
 const coordinates = [
   [40.758896, -73.98513], // Times Square
@@ -29,20 +29,20 @@ export default function Map() {
   //Set-up initial map of first render
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
-      version: 'weekly',
+      apiKey: "AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4",
+      version: "weekly",
     });
     // Load the Google Maps API library
-    loader.importLibrary('core', 'geometry', 'places').then(() => {
+    loader.importLibrary("core", "geometry", "places").then(() => {
       // Initialize the map on a DOM element with id of 'map' that is created on first render
-      const newMap = new google.maps.Map(document.getElementById('map'), {
+      const newMap = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 40.75368539999999, lng: -73.9991637 },
         zoom: 12,
       });
       //set the current center
       setCenter([newMap.getCenter().lat(), newMap.getCenter().lng()]);
       //add a listener to the map to change the center when moving
-      newMap.addListener('center_changed', () => {
+      newMap.addListener("center_changed", () => {
         setCenter([newMap.getCenter().lat(), newMap.getCenter().lng()]);
       });
       //store the map as a state so it can be referenced outside
@@ -71,24 +71,24 @@ export default function Map() {
   }, [center]);
   /****************************HANDLER FUNCTIONS************************************ */
   function fetchListings() {
-    console.log('wait');
+    console.log("wait");
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
     }
-    fetch('/listing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("/listing", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(center),
     })
       //data to get back should be an array of objects {name:, lat:, lng}
       .then((data) => data.json())
-      .catch(() => console.log('i failed here'))
+      .catch(() => console.log("i failed here"))
       .then((data) => {
         data.forEach((el) => {
           addMarker(el.name, el.lat, el.lng, map);
         });
       })
-      .catch(() => console.log('error setting markers'));
+      .catch(() => console.log("error setting markers"));
   }
   //Create a random marker on the map
   //@Params {string} - name : decription of listing
@@ -105,9 +105,9 @@ export default function Map() {
     const infowindow = new google.maps.InfoWindow({});
     let tempdiv;
     //onclick event of the marker which will open up a listingpopup
-    newMarker.addListener('click', () => {
+    newMarker.addListener("click", () => {
       //create an empty div to be put into the infowindow and store that element in a temporary variable
-      tempdiv = document.createElement('div');
+      tempdiv = document.createElement("div");
       //append the Listingpopup react component to the temporary div
       ReactDOM.render(<ListingPopUp name={name} />, tempdiv);
       //set the contents of the inforwindow to the div now containing the ListingPopUp
@@ -121,8 +121,8 @@ export default function Map() {
       });
     });
     //add event listener to unmount the listing popup to not clutter the dom and end the react component lifecycle
-    infowindow.addListener('closeclick', () => {
-      console.log('unmounting');
+    infowindow.addListener("closeclick", () => {
+      console.log("unmounting");
       ReactDOM.unmountComponentAtNode(tempdiv);
     });
     //add the marker to the markerList array for reference to be cleaned up later
@@ -135,9 +135,9 @@ export default function Map() {
     e.preventDefault();
     //get the zip value from the form
     const zip = e.target[0].value;
-    fetch('/api/setCenter', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch("/api/setCenter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ zip: zip }),
     })
       //expected data to be {lon: , lat:}
@@ -145,14 +145,14 @@ export default function Map() {
       .then((data) => {
         map.setCenter(data);
       })
-      .catch(() => console.log('could not set center'));
+      .catch(() => console.log("could not set center"));
   }
 
   /***********************************RENDER COMPONENT************************************** */
   return (
-    <div>
-      <div id="map" style={{ height: '80vh', width: '100%' }}></div>
-      <button onClick={addMarker} style={{ border: '1px solid red' }}>
+    <>
+      <div id="map" style={{ height: "94vh", width: "100%" }}></div>
+      {/* <button onClick={addMarker} style={{ border: '1px solid red' }}>
         add
       </button>
       <p>
@@ -161,7 +161,7 @@ export default function Map() {
       <form name="myForm" onSubmit={(e) => zipCenter(e)} method="POST">
         <input id="location" type="text" name="zip" />
         <input type="submit" value="Submit" />
-      </form>
-    </div>
+      </form> */}
+    </>
   );
 }
