@@ -4,7 +4,7 @@ export const mainSlice = createSlice({
     name: 'main',
     initialState: {
         navPosition: 'Browse', // 'Browse' or 'Upload' or 'Map'
-        location: { zip: '10001', lat: 40.713050, lng: -74.007230 }, // {zip, lat, lng}
+        location: null, // {zip, lat, lng}
         listings: [], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
         newListingPhoto: {}, // {url, lat, lng}
         activeListing: '', // _id

@@ -7,35 +7,31 @@ import { setLocation } from "../mainSlice";
 export default function GetLocation() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
-  const [inputInvalid, setInputInvalid] = useState(true)
+  const [inputInvalid, setInputInvalid] = useState(true);
   useEffect(() => {
-    setInputInvalid(false)
-  }, [])
+    setInputInvalid(false);
+  }, []);
 
-  const dispatchLocation = async (e) => {
-    // target the input field above the button and get the value.
-    const zipCode = e.target.previousSibling.lastChild.childNodes[0].value;
-    // const response = await fetch('/api/setCenter', {
-    //   method: 'POST',
-    //   body: { zip: zipCode }
-    // })
-    // const data = await response.json();
-    // console.log(data);
-
-    // console.log(typeof zipCode)
-    dispatch(setLocation({ zip: 10023, lat: 40.777, lng: -73.981 }));
-  }
+  const formSubmit = async (e) => {
+    e.preventDefault(); // prevent page reload on submit
+    const zip = e.target[0].value;
+    fetch("/api/setCenter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ zip: zip }),
+    })
+      .then((data) => data.json()) // data = {lat, lng}
+      .then((data) => dispatch(setLocation({ zip, ...data })))
+      .catch(() => console.log("Could not get coordinates."));
+  };
 
   const checkZipCode = (e) => {
-    if (e.target.value.length === 0) setInputInvalid(false)
+    // PROTIP FROM ROBIN: testID as an id for testing purposes, not data-testId
+    if (e.target.value.length === 0) setInputInvalid(false);
     if (!parseInt(e.target.value) || e.target.value.length !== 5) {
       setInputInvalid(true);
-    }
-    else setInputInvalid(false);
-  }
-
-  // PROTIP FROM ROBIN:
-  // testID as an id for testing purposes, not data-testId
+    } else setInputInvalid(false);
+  };
 
   return (
     <Box
@@ -44,15 +40,22 @@ export default function GetLocation() {
       alignItems="center"
       justifyContent="center"
       height="100vh"
+      component="form"
+      onSubmit={formSubmit}
     >
-      <Typography variant="h2" textAlign={"center"} sx={{ margin: "10px" }}>Swoop <br /> NYC</Typography>
+      <Typography variant="h2" textAlign={"center"} sx={{ margin: "10px" }}>
+        Swoop <br /> NYC
+      </Typography>
       <TextField
         label="Enter Your Zip Code"
+        name="entryText"
         sx={{ margin: "10px", textAlign: "center" }}
         error={inputInvalid}
-        onChange={(e) => checkZipCode(e)}></TextField>
-      <Button variant="outlined" sx={{ margin: "10px" }} onClick={(e) => { dispatchLocation(e) }}>Swoop!</Button>
-    </Box >
-
+        onChange={(e) => checkZipCode(e)}
+      ></TextField>
+      <Button variant="outlined" sx={{ margin: "10px" }} type="submit">
+        Swoop!
+      </Button>
+    </Box>
   );
 }
