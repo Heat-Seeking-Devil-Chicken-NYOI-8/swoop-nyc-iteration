@@ -66,7 +66,10 @@ export default function PreviewListing() {
       body: JSON.stringify(postData),
     })
       .then((data) => data.json()) // data = {_id, creation_date}
-      .then((data) => dispatch(addNewListing({ ...data, ...postData })))
+      .then((data) => {
+        dispatch(addNewListing({ ...data, ...postData }));
+        navigate("/");
+      })
       .catch((err) => console.log("Error posting listing: ", err));
   };
 
@@ -141,6 +144,7 @@ export default function PreviewListing() {
           <Button
             variant="contained"
             size="small"
+            onClick={() => navigate("/upload")}
             sx={{
               margin: "0 10 20 10",
               padding: "10",
