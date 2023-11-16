@@ -14,6 +14,7 @@ import {
   Paper,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 export default function Browse() {
   const state = useSelector((state) => state.main);
@@ -69,7 +70,7 @@ export default function Browse() {
               sx={{ mr: 2 }}
               onClick={() => setIsOpen(true)}
             >
-              <MenuIcon />
+              <FilterAltIcon />
             </IconButton>
 
             {/* Swappable Drawer */}
