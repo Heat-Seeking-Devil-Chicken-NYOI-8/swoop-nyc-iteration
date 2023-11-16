@@ -25,7 +25,6 @@ describe('GetLocation', () => {
   let getLocation;
   const props = { location: null }
 
-  //ARRANGE
   beforeEach(() =>
     getLocation = render(
       <Provider store={store}>
@@ -33,7 +32,6 @@ describe('GetLocation', () => {
       </Provider>
     ))
 
-  //ASSERT
   it('Should render correctly', () => {
     // console.log("hello!")
     const header = document.querySelector("h2")
@@ -47,38 +45,47 @@ describe('GetLocation', () => {
 
   it('Should not accept letters in zip codes', async () => {
     const zipInput = document.querySelector('#zipCodeInput')
+    const submitButton = document.querySelector("#zipCodeSubmit")
 
     await userEvent.type(zipInput, "a2345")
     expect(zipInput.getAttribute("aria-invalid")).toBe("true")
+    expect(submitButton.hasAttribute("disabled")).toBe(true)
   })
 
-  it('Should not accept any number other than those with 5 digits', async () => {
+  it('Should not accept a zip code with fewer than 5 digits', async () => {
     const zipInput = document.querySelector('#zipCodeInput')
+    const submitButton = document.querySelector("#zipCodeSubmit")
 
     await userEvent.click(zipInput)
     await userEvent.type(zipInput, "123")
-    // console.log(zipInput.getAttribute('aria-invalid'))
+
 
     expect(zipInput.getAttribute("aria-invalid")).toBe("true")
+    expect(submitButton.hasAttribute("disabled")).toBe(true)
+
   })
 
-  it('Should not accept any number other than those with 5 digits', async () => {
+  it('Should accept a 5 digit zip code', async () => {
     const zipInput = document.querySelector('#zipCodeInput')
+    const submitButton = document.querySelector("#zipCodeSubmit")
 
     await userEvent.click(zipInput)
-    await userEvent.type(zipInput, "12345").then
-    // console.log(zipInput.getAttribute('aria-invalid'))
-
+    await userEvent.type(zipInput, "12345")
 
     expect(zipInput.getAttribute("aria-invalid")).toBe("false")
+    expect(submitButton.hasAttribute("disabled")).toBe(false)
   })
 
-  it('Should not accept any number other than those with 5 digits', async () => {
+  it('Should not accept more than 5 digits for zip code', async () => {
     const zipInput = document.querySelector('#zipCodeInput')
+    const submitButton = document.querySelector("#zipCodeSubmit")
 
     await userEvent.click(zipInput)
     await userEvent.type(zipInput, "123456")
+
+
     expect(zipInput.getAttribute("aria-invalid")).toBe("true")
+    expect(submitButton.hasAttribute("disabled")).toBe(true)
   })
 
 })
