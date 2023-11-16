@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setNavPosition } from "../mainSlice";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -19,6 +20,7 @@ import TextField from "@mui/material/TextField";
 export default function ViewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -41,7 +43,8 @@ export default function ViewListing() {
             variant="text"
             startIcon={<KeyboardBackspaceOutlinedIcon />}
             size="small"
-            sx={{ marginRight: "200" }}
+            sx={{ marginRight: "230" }}
+            onClick={() => navigate("/")}
           >
             Back
           </Button>

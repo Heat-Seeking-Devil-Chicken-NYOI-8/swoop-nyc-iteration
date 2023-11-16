@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setNavPosition } from "../mainSlice";
 import {
   AppBar,
@@ -15,17 +16,19 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import Chip from "@mui/material/Chip";
 
 export default function Browse() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = React.useState(false);
 
   const listingBundle = [];
   for (let i = 0; i < 10; i++) {
     listingBundle.push(
       <Paper sx={{ marginBottom: "20" }}>
-        <Box display="flex">
+        <Box display="flex" onClick={() => navigate("/viewlisting")}>
           <Box padding="10" flex="0 0 auto" width="33%">
             <img
               className="squareImg"
@@ -43,6 +46,10 @@ export default function Browse() {
                 "linear-gradient(to bottom, black calc(100% - 50px), transparent 100%)",
             }}
           >
+            <Typography variant="body2" color="green" component="div">
+              ● 0.3 mi away
+            </Typography>
+            {/* <Chip label="0.3 mi away" size="small" /> */}
             <Typography variant="body1" color="inherit" component="div">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
