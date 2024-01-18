@@ -5,10 +5,10 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import { store } from '../store';
 
 const ListingPopUp = ({ name, url, _id }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const state = useSelector((state) => state.main);
-  const dispatch = useDispatch();
+  // const state = useSelector((state) => state.main);
+  // const dispatch = useDispatch();
 
   return (
     <div

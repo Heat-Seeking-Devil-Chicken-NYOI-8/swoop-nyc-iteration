@@ -3,7 +3,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 const path = require('path');
-const db = require('./model.js');
 
 // parse JSON from incoming requests
 app.use(express.json());
@@ -30,6 +29,7 @@ app.get('/', (req, res) => {
 // handle API calls
 app.use('/api', googleMapsRouter);
 app.use('/listing', listingRouter);
+app.use('/photos', listingRouter);
 
 /********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route

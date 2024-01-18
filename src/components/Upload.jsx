@@ -9,30 +9,14 @@ import { createClient } from "@supabase/supabase-js";
 import exifr from "exifr";
 
 export default function Upload() {
-  const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const supabaseUrl = "https://iqmxeqilgrwqfrwxzqfz.supabase.co";
-  const supabaseKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxbXhlcWlsZ3J3cWZyd3h6cWZ6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5OTk3ODcwNSwiZXhwIjoyMDE1NTU0NzA1fQ.mYd_pX1TRRmBIRGkpDCrBr_ezWF1RDSGVCp8rMlXYGo"; //process.env.REACT_APP_SUPABASE;
-  const supabase = createClient(supabaseUrl, supabaseKey);
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     const fileName = Math.trunc(10 ** 6 * Math.random()) + file.name;
 
-    const { data, error } = await supabase.storage
-      .from("images")
-      .upload(fileName, file);
-
-    const url = await supabase.storage.from("images").getPublicUrl(fileName)
-      .data.publicUrl;
-
-    let { latitude, longitude } = await exifr.gps(file);
-
-    dispatch(savePhoto({ url, lat: latitude, lng: longitude }));
-
+    dispatch(savePhoto({fileName, file}));
     navigate("/previewlisting");
   };
 

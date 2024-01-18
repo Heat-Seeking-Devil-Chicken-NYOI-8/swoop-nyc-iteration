@@ -1,7 +1,8 @@
-const db = require('../model.js');
+const db = require('../Models/PGmodel.js');
+const supabase = require('../Models/SupabaseModel.js');
 const listingController = {};
 
-
+//get all the available listings
 listingController.getListings = async (req, res, next) => {
   const query = 'SELECT * FROM listings'; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
   try {
@@ -17,6 +18,7 @@ listingController.getListings = async (req, res, next) => {
   }
 };
 
+//add a listing
 listingController.addListing = async (req, res, next) => {
   console.log(req.body);
   const { url, lat, lng, tags, description } = req.body;
@@ -34,6 +36,26 @@ listingController.addListing = async (req, res, next) => {
     });
   }
 };
+
+//upload the image to supabase
+listingController.addPhoto = async (req, res, next) => {
+  const { fileName, file } = req.body;
+  try{
+  const { data, error } = await supabase.storage
+    .from('images')
+    .upload(fileName, file);
+   res.locals.url = await supabase.storage.from('images').getPublicUrl(fileName).data
+    .publicUrl;
+    console.log(res.locals.url)
+  next()
+  //let { latitude, longitude } = await exifr.gps(file);
+}catch(e){
+  next({
+    log: `controller.addphoto: ${e}`,
+    status: 500,
+    message: { err: 'An error occurred. See log for details.' },
+  });
+};}
 
 // Export the controller object
 module.exports = listingController;

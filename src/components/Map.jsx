@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { setNavPosition, initializeListings } from '../mainSlice';
-import { Box } from '@mui/material';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
-import PreviewListing from './PreviewListing.jsx';
 import { store } from '../store.js';
 import { useNavigate } from 'react-router-dom';
 

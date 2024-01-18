@@ -1,7 +1,12 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-    connectionString: process.env.PG_URI
+    connectionString: 'postgres://wpkjemsd:2GbAVbR9j_HwjxpDPqeGn8XpscuU6hgY@batyr.db.elephantsql.com/wpkjemsd'
+});
+
+pool.on('connect', () => {
+    console.log('Connected to PostgreSQL database');
 });
 
 module.exports = {

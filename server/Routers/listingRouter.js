@@ -5,11 +5,11 @@ const router = express.Router();
 
 //recieves an array [lat,lng] and sends back an array of listing objects
 //based on distance
-router.post('/', listingController.getListings,(req, res) => {
+router.get('/', listingController.getListings,(req, res) => {
   return res.status(200).json(res.locals.data);
 });
 
-router.post('/addListing', listingController.addListing, (req, res) => {
+router.post('/', listingController.addListing, (req, res) => {
   return res.status(200).json(res.locals.data);
 });
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const googleMapsController = require('../Controllers/googleMapsController');
-const listingController = require('../Controllers/listingController');
+//const listingController = require('../Controllers/listingController');
 const cookieController = require('../Controllers/cookieController')
 const router = express.Router();
 
