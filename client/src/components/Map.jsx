@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { setNavPosition, initializeListings } from '../mainSlice';
+import { setNavPosition, initializeListings } from '../mainSlice.js';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
 import { store } from '../store.js';

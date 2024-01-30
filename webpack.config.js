@@ -2,8 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  //environmental variables to change Development / Production Modes
   mode: process.env.NODE_ENV,
-  entry: './src/index.js',
+  //entry point to create bundle
+  entry: './client/src/index.js',
+  //create the bundle.js in 'dist' folder
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'index_bundle.js',

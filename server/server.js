@@ -9,27 +9,28 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
 
+// handle requests from static files
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
+
 /****************************ROUTER IMPORT******************************************* */
 const googleMapsRouter = require('./Routers/googleMapsRouter.js');
 const listingRouter = require('./Routers/listingRouter.js');
 
-/***********************HANDLING STATIC FILES********************************************* */
-// handle requests from static files
-app.use('/dist', express.static(path.join(__dirname, '../dist')));
+/***********************MAIN PAGE LOAD********************************************* */
+// main page get. send them the html file
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
+});
 
 app.get('/map', (req, res) => {
   res.redirect('/');
-});
-// route handler to respond with main app
-app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 /******************************ACTIONS**************************************** */
 // handle API calls
 app.use('/api', googleMapsRouter);
 app.use('/listing', listingRouter);
-app.use('/photos', listingRouter);
+// app.use('/photos', listingRouter);
 
 /********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route

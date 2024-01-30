@@ -39,23 +39,29 @@ listingController.addListing = async (req, res, next) => {
 
 //upload the image to supabase
 listingController.addPhoto = async (req, res, next) => {
-  const { fileName, file } = req.body;
-  try{
-  const { data, error } = await supabase.storage
-    .from('images')
-    .upload(fileName, file);
-   res.locals.url = await supabase.storage.from('images').getPublicUrl(fileName).data
-    .publicUrl;
-    console.log(res.locals.url)
-  next()
-  //let { latitude, longitude } = await exifr.gps(file);
-}catch(e){
-  next({
-    log: `controller.addphoto: ${e}`,
-    status: 500,
-    message: { err: 'An error occurred. See log for details.' },
-  });
-};}
+  console.log(req.file);
+  const file  = req.file;
+  const fileName = Math.trunc(10 ** 6 * Math.random()) + 'help';
+
+  try {
+    const { data, error } = await supabase.storage
+      .from('images')
+      .upload(fileName, file);
+      console.log(data)
+    // res.locals.url = await supabase.storage
+    //   .from('swoop')
+    //   .getPublicUrl(fileName).data.publicUrl;
+    // console.log(res.locals.url);
+    next();
+    //let { latitude, longitude } = await exifr.gps(file);
+  } catch (e) {
+    next({
+      log: `controller.addphoto: ${e}`,
+      status: 500,
+      message: { err: 'An error occurred. See log for details.' },
+    });
+  }
+};
 
 // Export the controller object
 module.exports = listingController;
