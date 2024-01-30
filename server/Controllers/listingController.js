@@ -1,6 +1,8 @@
 const db = require('../Models/PGmodel.js');
 const supabase = require('../Models/SupabaseModel.js');
 const listingController = {};
+const exifr = require('exifr');
+const fs = require('fs')
 
 //get all the available listings
 listingController.getListings = async (req, res, next) => {
@@ -40,20 +42,19 @@ listingController.addListing = async (req, res, next) => {
 //upload the image to supabase
 listingController.addPhoto = async (req, res, next) => {
   console.log(req.file);
-  const file  = req.file;
-  const fileName = Math.trunc(10 ** 6 * Math.random()) + 'help';
+  //const file = req.file;
+ const fileName = `${Date.now()}_help.jpg`;
 
   try {
     const { data, error } = await supabase.storage
+      .from('Swoop')
+      .upload(fileName, req.file.buffer, {'contentType':'image/jpeg'});
+    console.log(data);
+    res.locals.url = await supabase.storage
       .from('images')
-      .upload(fileName, file);
-      console.log(data)
-    // res.locals.url = await supabase.storage
-    //   .from('swoop')
-    //   .getPublicUrl(fileName).data.publicUrl;
-    // console.log(res.locals.url);
+      .getPublicUrl(fileName).data.publicUrl;
+    console.log(res.locals.url);
     next();
-    //let { latitude, longitude } = await exifr.gps(file);
   } catch (e) {
     next({
       log: `controller.addphoto: ${e}`,
@@ -63,5 +64,22 @@ listingController.addPhoto = async (req, res, next) => {
   }
 };
 
+listingController.getCoor = async (req, res, next) => {
+  try {
+    console.log('gettingCoors', res.locals.url);
+    let { latitude, longitude } = await exifr.gps(req.file.buffer);
+    console.log('coors are', longitude, latitude);
+    res.locals.coor = { lat: latitude, lng: longitude };
+    next();
+  } catch {
+    (e) => {
+      next({
+        log: `controller.getCoor: ${e}`,
+        status: 500,
+        message: { err: 'could not get coordinates' },
+      });
+    };
+  }
+};
 // Export the controller object
 module.exports = listingController;

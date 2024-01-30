@@ -6,16 +6,25 @@ const cookieController = require('../Controllers/cookieController');
 const router = express.Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: multer.memoryStorage(), // Change this to multer.diskStorage() for on-disk storage
+});
+//const upload = multer({ dest: 'uploads/' });
 //recieves an array [lat,lng] and sends back an array of listing objects
 //based on distance
 router.get('/', listingController.getListings, (req, res) => {
   return res.status(200).json(res.locals.data);
 });
 
-router.post('/', upload.single('file'), (req, res) => {
-  console.log('body', req.body);
-  return res.status(200).json('res.locals.data');
-});
+router.post(
+  '/',
+  upload.single('file'),
+  listingController.addPhoto,
+  listingController.getCoor,
+  (req, res) => {
+    console.log('res.locals', res.locals);
+    return res.status(200).json(res.locals);
+  }
+);
 
 module.exports = router;

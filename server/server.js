@@ -3,6 +3,8 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 const path = require('path');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 // parse JSON from incoming requests
 app.use(express.json());
@@ -25,12 +27,18 @@ app.get('/', (req, res) => {
 app.get('/map', (req, res) => {
   res.redirect('/');
 });
+app.get('/upload', (req, res) => {
+  res.redirect('/');
+});
 
 /******************************ACTIONS**************************************** */
 // handle API calls
 app.use('/api', googleMapsRouter);
 app.use('/listing', listingRouter);
-// app.use('/photos', listingRouter);
+// app.post('/listing',upload.single('file'),(req, res) => {
+//  // console.log(req.file);
+//   res.status(200).json({ we: 'did' });
+// });
 
 /********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route
@@ -44,7 +52,7 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
-    message: { err: 'An error occurred' },
+    message: { err: 'this is the global error' },
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);

@@ -15,18 +15,18 @@ export default function Upload() {
   //takes in the file and
   const handleFileChange = async (e) => {
     //create formdata that would be passed to the back end. it is an object
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-    console.log(e.target.files[0]);
-    console.log(formData);
+    console.log('file selected', e.target.files);
 
+    let form_data = new FormData();
+    form_data.append('file', e.target.files[0], "dog");
+
+    console.log([...form_data])
     const data = await fetch('/listing', {
       method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data' },
-      body: formData,
+      body: form_data,
     });
-    const res = await data.json();
-    console.log('res', res);
+    // const res = await data.json();
+    // console.log('res', res);
     // dispatch(savePhoto({ data }));
     // navigate('/previewlisting');
   };
@@ -84,5 +84,9 @@ export default function Upload() {
         </Box>
       </Button>
     </Box>
+    //     <form action="/listing" method="post" enctype="multipart/form-data">
+    //   <input type="file" name="file"/>
+    //   <button type="submit">Upload</button>
+    // </form>
   );
 }
