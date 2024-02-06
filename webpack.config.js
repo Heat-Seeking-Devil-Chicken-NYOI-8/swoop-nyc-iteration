@@ -21,7 +21,7 @@ module.exports = {
     proxy: {
       // need to list for every endpoint used
       '/map': 'http://localhost:3000',
-      '/listing': 'http://localhost:3000/listing',
+      '/listing': 'http://localhost:3000',
       '/api': 'http://localhost:3000',
       '/upload': 'http://localhost:3000',
     },

@@ -64,11 +64,9 @@ listingController.addPhoto = async (req, res, next) => {
 
 //delete an image from supabase
 listingController.deletePhoto = async (req, res, next) => {
-  const { url } = req.body;
-  const file = url.split('/').pop();
+  const {img} = req.params
   try {
-    const { data, error } = await supabase.storage.from('Swoop').remove([file]);
-    console.log(data);
+    const { data, error } = await supabase.storage.from('Swoop').remove([img]);
     next();
   } catch {
     (e) => {

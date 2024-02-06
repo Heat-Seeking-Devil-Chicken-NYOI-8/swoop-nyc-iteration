@@ -29,7 +29,7 @@ router.post(
   }
 );
 
-router.delete('/', listingController.deletePhoto, (req, res)=>{
+router.delete('/:img', listingController.deletePhoto, (req, res)=>{
   return res.status(200).send('deleted')
 })
 

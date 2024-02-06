@@ -76,14 +76,13 @@ export default function PreviewListing() {
   };
 
   //cancel. remove image from database and navigate back to upload page
-  const formCancel = async (e) => {
-    const data = await fetch('/listing', {
+  const formCancel = async () => {
+    let img = state.newListingPhoto.url.split('/').pop();
+    const data = await fetch(`/listing/${img}`, {
       method: 'DELETE',
-      headers: {'content-type':'JSON/application'},
-      body: JSON.stringify({url: state.newListingPhoto.url})
     });
-    
-  }
+    // navigate('/upload');
+  };
 
   return (
     <>
@@ -152,7 +151,7 @@ export default function PreviewListing() {
           <Button
             variant="contained"
             size="small"
-            onClick={() => navigate('/upload')}
+            onClick={() => formCancel()}
             sx={{
               margin: '0 10 20 10',
               padding: '10',
