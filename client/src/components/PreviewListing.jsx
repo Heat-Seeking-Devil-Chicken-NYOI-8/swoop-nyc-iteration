@@ -61,16 +61,19 @@ export default function PreviewListing() {
       tags: tags,
       description: description,
     };
-    fetch('/listing/addListing', {
+
+    let img = state.newListingPhoto.url.split('/').pop();
+
+    fetch(`/listing/${img}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postData),
     })
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
-        dispatch(addNewListing({ ...data, ...postData }));
+        dispatch(addNewListing({ ...data}));
         console.log('succesfully added');
-        navigate('/');
+       // navigate('/');
       })
       .catch((err) => console.log('Error posting listing: ', err));
   };
@@ -81,7 +84,7 @@ export default function PreviewListing() {
     const data = await fetch(`/listing/${img}`, {
       method: 'DELETE',
     });
-    // navigate('/upload');
+    navigate('/upload');
   };
 
   return (
@@ -120,7 +123,7 @@ export default function PreviewListing() {
             label="Tags (space-separated)"
             name="tags"
             variant="standard"
-            // defaultValue="tag1 tag2 tag3 tag4 tag5"
+            placeholder="tag1 tag2 tag3 tag4 tag5"
           ></TextField>
         </Box>
 
@@ -133,7 +136,7 @@ export default function PreviewListing() {
             label="Description"
             name="description"
             variant="standard"
-            // defaultValue="hi this is the description of the item that is listed above
+            placeholder="Description of the item that is listed above"
           />
         </Box>
 

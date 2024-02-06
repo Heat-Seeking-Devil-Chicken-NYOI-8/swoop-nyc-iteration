@@ -5,10 +5,14 @@ const exifr = require('exifr');
 
 //get all the available listings
 listingController.getListings = async (req, res, next) => {
-  const query = 'SELECT * FROM listings'; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
+  // const query = 'SELECT * FROM listings'; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
+  // try {
+  //   const data = await db.query(query);
+  //   res.locals.data = data;
   try {
-    const data = await db.query(query);
-    res.locals.data = data;
+    let { data: listings, error } = await supabase.from('listings').select('*');
+    res.locals.listings = listings
+    if (error) throw error
     next();
   } catch (e) {
     next({
@@ -23,11 +27,21 @@ listingController.getListings = async (req, res, next) => {
 listingController.addListing = async (req, res, next) => {
   console.log(req.body);
   const { url, lat, lng, tags, description } = req.body;
-  const query =
-    'INSERT INTO listings (url, lat, lng, description, flag) VALUES ($1, $2, $3, $4, $5) RETURNING (_id, creation_date)'; // TO DO: return {_id, creation_date}
+  // const query =
+  //   'INSERT INTO listings (url, lat, lng, description, flag) VALUES ($1, $2, $3, $4, $5) RETURNING (_id, creation_date)'; // TO DO: return {_id, creation_date}
+  // try {
+  //   const data = await db.query(query, [url, lat, lng, description, false]);
+  //   res.locals.data = data.rows;
+  //   next();
   try {
-    const data = await db.query(query, [url, lat, lng, description, false]);
-    res.locals.data = data.rows;
+    const { data, error } = await supabase
+      .from('listings')
+      .insert([
+        { url: url, lat: lat, lng: lng, description: description, flag: true },
+      ])
+      .select();
+    res.locals.data = data;
+    if (error) throw error;
     next();
   } catch (e) {
     next({
@@ -64,7 +78,7 @@ listingController.addPhoto = async (req, res, next) => {
 
 //delete an image from supabase
 listingController.deletePhoto = async (req, res, next) => {
-  const {img} = req.params
+  const { img } = req.params;
   try {
     const { data, error } = await supabase.storage.from('Swoop').remove([img]);
     next();

@@ -13,8 +13,9 @@ const upload = multer({
 //recieves an array [lat,lng] and sends back an array of listing objects
 //based on distance
 router.get('/', listingController.getListings, (req, res) => {
-  return res.status(200).json(res.locals.data);
+  return res.status(200).json(res.locals.listings);
 });
+
 
 //add a listing -> (file) -> add to supabase -> get coodinates -> return S3 URL and coordinates
 //{url: "" , coor: {lat:"", lng:""}}
@@ -27,8 +28,16 @@ router.post(
     console.log('res.locals', res.locals);
     return res.status(200).json(res.locals);
   }
-);
+  );
 
+//add to the sql database
+router.post('/:img', listingController.addListing, (req,res)=>{
+  res.status(201).json(res.locals.data)
+  })
+
+  
+  
+  //delete photo from supabase
 router.delete('/:img', listingController.deletePhoto, (req, res)=>{
   return res.status(200).send('deleted')
 })

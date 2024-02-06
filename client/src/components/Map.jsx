@@ -67,17 +67,13 @@ export default function Map() {
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
     }
-    fetch('/listing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(center),
-    })
+    fetch('/listing')
       //data to get back should be an array of objects {name:, lat:, lng}
       .then((data) => data.json())
       .catch(() => console.log('i failed here'))
       .then((data) => {
-        console.log(data.rows);
-        data.rows.forEach((el) => {
+        console.log(data);
+        data.forEach((el) => {
           initializeListings(data);
           addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
         });
