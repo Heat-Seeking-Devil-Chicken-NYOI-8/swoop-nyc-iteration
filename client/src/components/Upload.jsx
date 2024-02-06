@@ -3,32 +3,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setNavPosition, savePhoto } from '../mainSlice';
 import { Box, Typography, Button, Icon, Input } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { Upgrade } from '@mui/icons-material';
-import exifr from 'exifr';
 
 export default function Upload() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   /*************************** HANDLER FUNCTIONS ****************************************** */
-  //takes in the file and
+  //takes in the file and sends to back end ->
+  //responds with URL and coordinates of photo. ->
+  //sets the newListingPhoto state and navigates to the preview listing page
   const handleFileChange = async (e) => {
-    //create formdata that would be passed to the back end. it is an object
-    console.log('file selected', e.target.files);
-
     let form_data = new FormData();
-    form_data.append('file', e.target.files[0], "dog");
+    form_data.append('file', e.target.files[0]);
 
-    console.log([...form_data])
     const data = await fetch('/listing', {
       method: 'POST',
       body: form_data,
     });
-    // const res = await data.json();
-    // console.log('res', res);
-    // dispatch(savePhoto({ data }));
-    // navigate('/previewlisting');
+    const { url, coor } = await data.json();
+    dispatch(savePhoto({ url: url, coor: coor }));
+    navigate('/previewlisting');
   };
 
   return (
@@ -84,9 +79,5 @@ export default function Upload() {
         </Box>
       </Button>
     </Box>
-    //     <form action="/listing" method="post" enctype="multipart/form-data">
-    //   <input type="file" name="file"/>
-    //   <button type="submit">Upload</button>
-    // </form>
   );
 }

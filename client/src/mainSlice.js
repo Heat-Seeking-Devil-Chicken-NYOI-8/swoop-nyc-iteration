@@ -1,12 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
-import exifr from 'exifr';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 export const mainSlice = createSlice({
   name: 'main',
   initialState: {
     navPosition: 'Browse', // 'Browse' or 'Upload' or 'Map'
     location: {}, //{ zip: '10001', lat: 40.713050, lng: -74.007230 }, // {zip, lat, lng}
-    file: {},
+    file: {}, //current file selected.
     listings: [
       {
         _id: 1,
@@ -61,7 +60,7 @@ export const mainSlice = createSlice({
         flag: false,
       },
     ], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
-    newListingPhoto: {}, // { url: 'https://iqmxeqilgrwqfrwxzqfz.supabase.co/storage/v1/object/public/images/985688IMG_2910.JPG', lat: 40.713050, lng: -74.007230 }, // {url, lat, lng}
+    newListingPhoto: { url: '', lat: '', lng: '' }, // { url: 'https://iqmxeqilgrwqfrwxzqfz.supabase.co/storage/v1/object/public/images/985688IMG_2910.JPG', lat: 40.713050, lng: -74.007230 }, // {url, lat, lng}
     activeListing: '', // _id
     searchInput: '', // current text in search box
   },
@@ -76,26 +75,16 @@ export const mainSlice = createSlice({
     },
     //store the current uploaded file as a key-value pair to state
     savePhoto: (state, action) => {
-      // payload: { fileName, fileURL }
-      //let { latitude, longitude }
-      console.log(action.payload.fileURL);
-      fetch(action.payload.fileURL)
-        .then((img) => {
-          console.log(img);
-          exifr.gps(img);
-        })
-        .then((loc) => {
-          state.file = {
-            fileName: action.payload.fileName,
-            lat: loc.latitude,
-            lng: loc.longitude,
-          };
-        });
-      //   fetch('/api/addListing', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: action.payload,
-      //   });
+      // payload: { url, coor{lat lng} }
+      let { url, coor } = action.payload;
+      console.log('current', current(state.file));
+      console.log('url in the store:', url);
+      //update the state
+      state.newListingPhoto = {
+        url: url,
+        lat: coor.lat,
+        lng: coor.lng,
+      };
     },
     //load the lisings
     initializeListings: (state, action) => {

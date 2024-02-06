@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setNavPosition, addNewListing } from '../mainSlice';
 import { Box } from '@mui/material';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -20,6 +16,7 @@ export default function PreviewListing() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //renders map on screen with marker of where the newListingPhoto state is
   useEffect(() => {
     const loader = new Loader({
       apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
@@ -35,6 +32,7 @@ export default function PreviewListing() {
     ); // createMap where div id="listingMap"
   }, []);
 
+  //create a map and add a marker to the center
   async function createMap(center, div, loader) {
     loader.importLibrary('core').then(() => {
       const newMap = new google.maps.Map(document.getElementById(div), {
@@ -50,6 +48,7 @@ export default function PreviewListing() {
     });
   }
 
+  //add the tags and info to the SQL Database
   const formSubmit = async (e) => {
     e.preventDefault(); // prevent page reload on submit
     const tags = e.target[0].value.split(' ');
@@ -75,6 +74,16 @@ export default function PreviewListing() {
       })
       .catch((err) => console.log('Error posting listing: ', err));
   };
+
+  //cancel. remove image from database and navigate back to upload page
+  const formCancel = async (e) => {
+    const data = await fetch('/listing', {
+      method: 'DELETE',
+      headers: {'content-type':'JSON/application'},
+      body: JSON.stringify({url: state.newListingPhoto.url})
+    });
+    
+  }
 
   return (
     <>
@@ -126,10 +135,6 @@ export default function PreviewListing() {
             name="description"
             variant="standard"
             // defaultValue="hi this is the description of the item that is listed above
-            // bcvdhjfzkbvx,cnjmnvdjf,nslac.masKXLs;ajefrkghjlsbd.nv
-            // zmxc,bvskdjfhzdcskafielrsurbhjvdfjn.cskmdlwejiflshugv n
-            // vbhdjcnjkdsjvbgvjnkdewjruhvjnfvbckjdf
-            // vhgkbj,nk.bhjvghcfgdxsrftyguhbhvgfcfvbn"
           />
         </Box>
 

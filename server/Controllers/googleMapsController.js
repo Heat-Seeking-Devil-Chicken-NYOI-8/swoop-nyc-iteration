@@ -1,4 +1,6 @@
-const apiKey = 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4';
+require('dotenv').config();
+
+const apiKey = process.env.GOOGLE_API;
 const googleMapsController = {};
 
 //fetches from googleMaps
@@ -23,12 +25,11 @@ googleMapsController.getCoordinatesFromZip = (req, res, next) => {
 };
 
 //filters data based on distance
-googleMapsController.distanceSelector = (req,res,next) => {
+googleMapsController.distanceSelector = (req, res, next) => {
   //request body is [lat,lng]
-  req.body
+  req.body;
   //data is an array of objects {name, lat, lng}
-res.locals.data.filter(el => el.lat, el.lng )
-
-}
+  res.locals.data.filter((el) => el.lat, el.lng);
+};
 
 module.exports = googleMapsController;

@@ -2,7 +2,6 @@ const db = require('../Models/PGmodel.js');
 const supabase = require('../Models/SupabaseModel.js');
 const listingController = {};
 const exifr = require('exifr');
-const fs = require('fs')
 
 //get all the available listings
 listingController.getListings = async (req, res, next) => {
@@ -43,16 +42,15 @@ listingController.addListing = async (req, res, next) => {
 listingController.addPhoto = async (req, res, next) => {
   console.log(req.file);
   //const file = req.file;
- const fileName = `${Date.now()}_help.jpg`;
+  const fileName = `${Date.now()}_help.jpg`;
 
   try {
     const { data, error } = await supabase.storage
       .from('Swoop')
-      .upload(fileName, req.file.buffer, {'contentType':'image/jpeg'});
+      .upload(fileName, req.file.buffer, { contentType: 'image/jpeg' });
     console.log(data);
-    res.locals.url = await supabase.storage
-      .from('images')
-      .getPublicUrl(fileName).data.publicUrl;
+    res.locals.url = await supabase.storage.from('Swoop').getPublicUrl(fileName)
+      .data.publicUrl;
     console.log(res.locals.url);
     next();
   } catch (e) {
@@ -64,6 +62,26 @@ listingController.addPhoto = async (req, res, next) => {
   }
 };
 
+//delete an image from supabase
+listingController.deletePhoto = async (req, res, next) => {
+  const { url } = req.body;
+  const file = url.split('/').pop();
+  try {
+    const { data, error } = await supabase.storage.from('Swoop').remove([file]);
+    console.log(data);
+    next();
+  } catch {
+    (e) => {
+      next({
+        log: `error in deletephoto`,
+        status: 500,
+        message: { err: `${e}` },
+      });
+    };
+  }
+};
+
+//get the coordinates of the image
 listingController.getCoor = async (req, res, next) => {
   try {
     console.log('gettingCoors', res.locals.url);
@@ -81,5 +99,6 @@ listingController.getCoor = async (req, res, next) => {
     };
   }
 };
+
 // Export the controller object
 module.exports = listingController;

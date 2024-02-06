@@ -3,8 +3,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 const path = require('path');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
 
 // parse JSON from incoming requests
 app.use(express.json());
@@ -23,7 +21,6 @@ const listingRouter = require('./Routers/listingRouter.js');
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
 });
-
 app.get('/map', (req, res) => {
   res.redirect('/');
 });
@@ -35,10 +32,6 @@ app.get('/upload', (req, res) => {
 // handle API calls
 app.use('/api', googleMapsRouter);
 app.use('/listing', listingRouter);
-// app.post('/listing',upload.single('file'),(req, res) => {
-//  // console.log(req.file);
-//   res.status(200).json({ we: 'did' });
-// });
 
 /********************************404 HANDLING********************************************** */
 // catch-all route handler for any requests to an unknown route
