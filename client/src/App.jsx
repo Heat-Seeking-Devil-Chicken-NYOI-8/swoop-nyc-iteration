@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import {
@@ -18,10 +18,23 @@ import PreviewListing from './components/PreviewListing';
 import Upload from './components/Upload';
 import ViewListing from './components/ViewListing';
 import { setNavPosition } from './mainSlice';
+import { initializeListings } from './mainSlice';
 
 export default function App() {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.main);
+
+  //fetch initial data
+  useEffect(() => {
+    fetch('/listing')
+      //data to get back should be an array of objects {name:, lat:, lng}
+      .then((data) => data.json())
+      .catch(() => console.log('i failed here'))
+      .then((data) => {
+        dispatch(initializeListings(data));
+      })
+      .catch(() => console.log('error initializing'));
+  }, []);
 
   if (!state.location)
     return (

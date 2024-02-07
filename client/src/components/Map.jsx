@@ -64,23 +64,36 @@ export default function Map() {
   /****************************HANDLER FUNCTIONS************************************ */
   function fetchListings() {
     console.log('wait');
+    //remove markers
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
     }
-    fetch('/listing')
-      //data to get back should be an array of objects {name:, lat:, lng}
-      .then((data) => data.json())
-      .catch(() => console.log('i failed here'))
-      .then((data) => {
-        console.log(data);
-        data.forEach((el) => {
-          initializeListings(data);
-          addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
-        });
-      })
-      .catch(() => console.log('error setting markers'));
+
+    //if listings is not empty, add each element as a marker 
+    if (state.listings.length > 0) {
+      state.listings.forEach((el) => {
+        addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
+      });
+      return;
+    }
+
+    //if state is empty fetch and update state
+    if (state.listings.length == 0) {
+      fetch('/listing')
+        //data to get back should be an array of objects {name:, lat:, lng}
+        .then((data) => data.json())
+        .catch(() => console.log('i failed here'))
+        .then((data) => {
+          dispatch(initializeListings(data))
+          data.forEach((el) => {
+            addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
+          });
+        })
+        .catch(() => console.log('error setting markers'));
+    }
   }
-  //Create a random marker on the map
+
+  //Create a marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
   //@Params {string} -url
@@ -142,7 +155,7 @@ export default function Map() {
       })
       .catch(() => console.log('could not set center'));
   }
-
+  console.log(state.listings);
   /***********************************RENDER COMPONENT************************************** */
   return (
     <div>

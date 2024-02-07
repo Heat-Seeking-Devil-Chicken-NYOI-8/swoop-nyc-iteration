@@ -71,9 +71,9 @@ export default function PreviewListing() {
     })
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
-        dispatch(addNewListing({ ...data}));
+        dispatch(addNewListing(data[0]));
         console.log('succesfully added');
-       // navigate('/');
+       navigate('/map');
       })
       .catch((err) => console.log('Error posting listing: ', err));
   };
