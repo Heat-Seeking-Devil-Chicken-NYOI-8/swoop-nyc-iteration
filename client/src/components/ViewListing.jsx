@@ -45,6 +45,11 @@ export default function ViewListing() {
     });
   }
 
+  const tags = [];
+  state.activeListing.tags.forEach((e) => {
+    tags.push(<Chip label={e} sx={{ padding: '0 5', margin: '5' }} />);
+  });
+
   return (
     <>
       <Box
@@ -73,13 +78,7 @@ export default function ViewListing() {
           </Button>
         </Box>
         <img className="squareImg" width={'30px'} src={activeListing.url} />
-        <Box margin="10 0">
-          <Chip label="Chair" sx={{ padding: '0 5', margin: '5' }} />
-          <Chip label="Blue" sx={{ padding: '0 5', margin: '5' }} />
-          <Chip label="Big chair" sx={{ padding: '0 5', margin: '5' }} />
-          <Chip label="Blue chair" sx={{ padding: '0 5', margin: '5' }} />
-          <Chip label="Blue" sx={{ padding: '0 5', margin: '5' }} />
-        </Box>
+        <Box margin="10 0">{tags}</Box>
 
         <Box display="flex" flexWrap="wrap" padding="10 0">
           <Typography variant="body1" color="inherit" component="div">

@@ -5,6 +5,7 @@ import { setNavPosition, setActiveListing } from '../mainSlice.js';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
 import { useNavigate } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
 
 export default function Map() {
   /****************************************STATES******************************************* */
@@ -18,7 +19,7 @@ export default function Map() {
   let markerList = [];
   /**************************************USE EFFECT***************************************** */
   //Set-up initial map of first render
-  
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
@@ -96,12 +97,18 @@ export default function Map() {
     let tempdiv;
     //onclick event of the marker which will open up a listingpopup
     newMarker.addListener('click', () => {
+      //close if tempdiv is defined
+      if (tempdiv != undefined) {
+        infowindow.close();
+        tempdiv = undefined;
+        return;
+      }
       //create an empty div to be put into the infowindow and store that element in a temporary variable
       tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
-      ReactDOM.render(
-        <ListingPopUp listing={listing} clickHandler={clickHandler} />,
-        tempdiv
+      const root = createRoot(tempdiv);
+      root.render(
+        <ListingPopUp listing={listing} clickHandler={clickHandler} />
       );
       //set the contents of the inforwindow to the div now containing the ListingPopUp
       //infowindow content takes in a string, or a dom element. NOT A REACT COMPONENT
@@ -114,10 +121,9 @@ export default function Map() {
       });
     });
     //add event listener to unmount the listing popup to not clutter the dom and end the react component lifecycle
-    infowindow.addListener('closeclick', () => {
-      console.log('unmounting');
-      ReactDOM.unmountComponentAtNode(tempdiv);
-    });
+    // infowindow.addListener('closeclick', () => {
+    //   root.render();
+    // });
     //add the marker to the markerList array for reference to be cleaned up later
     markerList.push(newMarker);
   }

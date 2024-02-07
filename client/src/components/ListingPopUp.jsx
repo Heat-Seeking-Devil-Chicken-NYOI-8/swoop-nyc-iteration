@@ -1,31 +1,32 @@
 import React from 'react';
-import { setActiveListing } from '../mainSlice';
-import { useNavigate, link } from 'react-router-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { store } from '../store';
+import { Box, Typography } from '@mui/material';
 
 const ListingPopUp = ({listing, clickHandler}) => {
-  // const navigate = useNavigate();
-
-  // const state = useSelector((state) => state.main);
-  // const dispatch = useDispatch();
 
   return (
-    <div
+    <Box
       className="listingPopUp"
       style={{
         width: '250px',
         height: '250px',
-        border: '1px solid red',
+        display:'flex',
+        flexDirection: "column",
+        justifyContent:"center",
+        alignItems:'center',
+        border: '1px solid grey',
+        borderRadius: '10px',
+        backgroundColor:'#fff'
       }}
     >
-      <b>{listing.description}</b>
+      <Typography>{listing.description}</Typography>
+      <Box flex="0 0 auto" width="80%">
       <img
         src={listing.url}
-        width="100%"
+        className="squareImg"
         onClick={() => clickHandler(listing)}
-      ></img>
-    </div>
+      />
+    </Box>
+    </Box>
   );
 };
 
