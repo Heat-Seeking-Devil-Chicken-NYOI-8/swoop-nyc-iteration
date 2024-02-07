@@ -4,7 +4,7 @@ import { Paper, Box, Typography } from '@mui/material';
 export default function BrowseItem({ listing, clickHandler }) {
   return (
     <Paper sx={{ marginBottom: '20', width:"90%"}}>
-      <Box display="flex" listid={listing._id} onClick={(e) => clickHandler(e)}>
+      <Box display="flex" listid={listing._id} onClick={() => clickHandler(listing)}>
         <Box padding="10" flex="0 0 auto" width="33%">
           <img listid={listing._id} className="squareImg" src={listing.url} />
         </Box>

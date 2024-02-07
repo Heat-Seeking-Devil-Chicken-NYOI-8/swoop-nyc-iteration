@@ -37,7 +37,7 @@ listingController.addListing = async (req, res, next) => {
     const { data, error } = await supabase
       .from('listings')
       .insert([
-        { url: url, lat: lat, lng: lng, description: description, flag: true },
+        { url: url, lat: lat, lng: lng, tags:tags, description: description, flag: true },
       ])
       .select();
     res.locals.data = data;

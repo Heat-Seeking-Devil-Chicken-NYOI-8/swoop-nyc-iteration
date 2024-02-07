@@ -18,6 +18,7 @@ export default function Map() {
   let markerList = [];
   /**************************************USE EFFECT***************************************** */
   //Set-up initial map of first render
+  
   useEffect(() => {
     const loader = new Loader({
       apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
