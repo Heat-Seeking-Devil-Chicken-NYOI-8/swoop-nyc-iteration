@@ -61,7 +61,7 @@ export const mainSlice = createSlice({
       // },
     ], // [{_id, creation_date, url, lat, lng, tags =[], description, flag}, ...]
     newListingPhoto: { url: '', lat: '', lng: '' }, // { url: 'https://iqmxeqilgrwqfrwxzqfz.supabase.co/storage/v1/object/public/images/985688IMG_2910.JPG', lat: 40.713050, lng: -74.007230 }, // {url, lat, lng}
-    activeListing: '', // _id
+    activeListing: {}, // _id
     searchInput: '', // current text in search box
   },
   reducers: {

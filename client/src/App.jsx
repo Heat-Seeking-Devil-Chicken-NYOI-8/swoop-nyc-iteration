@@ -11,14 +11,13 @@ import {
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import PlaceIcon from '@mui/icons-material/Place';
-import Browse from './components/Browse';
 import GetLocation from './components/GetLocation';
+import Browse from './components/Browse';
 import Map from './components/Map';
 import PreviewListing from './components/PreviewListing';
 import Upload from './components/Upload';
 import ViewListing from './components/ViewListing';
-import { setNavPosition } from './mainSlice';
-import { initializeListings } from './mainSlice';
+import { setNavPosition, initializeListings } from './mainSlice';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -36,60 +35,63 @@ export default function App() {
       .catch(() => console.log('error initializing'));
   }, []);
 
-  if (!state.location)
-    return (
-      <Box>
-        <CssBaseline />
-        <GetLocation />
-      </Box>
-    );
-  else
-    return (
-      <Router>
-        <CssBaseline />
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-          <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
-            <Routes>
-              <Route path="/" element={<Browse />} />
-              <Route path="/upload" element={<Upload />} />
-              <Route path="/map" element={<Map />} />
-              <Route path="/previewlisting" element={<PreviewListing />} />
-              <Route path="/viewlisting" element={<ViewListing />} />
-            </Routes>
-          </Box>
-
-          <Paper
-            sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-            elevation={3}
-          >
-            <BottomNavigation
-              showLabels
-              value={state.navPosition}
-              onChange={(event, newPosition) => {
-                dispatch(setNavPosition(newPosition));
-              }}
-            >
-              <BottomNavigationAction
-                label="Upload"
-                icon={<AddAPhotoIcon />}
-                component={Link}
-                to="/upload"
-              />
-              <BottomNavigationAction
-                label="Browse"
-                icon={<ViewListIcon />}
-                component={Link}
-                to="/"
-              />
-              <BottomNavigationAction
-                label="Map"
-                icon={<PlaceIcon />}
-                component={Link}
-                to="/map"
-              />
-            </BottomNavigation>
-          </Paper>
+  return (
+    <>
+      {!state.location ? (
+        <Box>
+          <CssBaseline />
+          <GetLocation />
         </Box>
-      </Router>
-    );
+      ) : (
+        <Router>
+          <CssBaseline />
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}
+          >
+            <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
+              <Routes>
+                <Route path="/" element={<Browse />} />
+                <Route path="/upload" element={<Upload />} />
+                <Route path="/map" element={<Map />} />
+                <Route path="/previewlisting" element={<PreviewListing />} />
+                <Route path="/viewlisting" element={<ViewListing />} />
+              </Routes>
+            </Box>
+
+            <Paper
+              sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+              elevation={3}
+            >
+              <BottomNavigation
+                showLabels
+                value={state.navPosition}
+                onChange={(event, newPosition) => {
+                  dispatch(setNavPosition(newPosition));
+                }}
+              >
+                <BottomNavigationAction
+                  label="Upload"
+                  icon={<AddAPhotoIcon />}
+                  component={Link}
+                  to="/upload"
+                />
+                <BottomNavigationAction
+                  label="Browse"
+                  icon={<ViewListIcon />}
+                  component={Link}
+                  to="/"
+                />
+                <BottomNavigationAction
+                  label="Map"
+                  icon={<PlaceIcon />}
+                  component={Link}
+                  to="/map"
+                />
+              </BottomNavigation>
+            </Paper>
+          </Box>
+        </Router>
+      )}
+    </>
+  );
 }

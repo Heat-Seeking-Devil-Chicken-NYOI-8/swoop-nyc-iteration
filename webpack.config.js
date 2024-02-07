@@ -24,6 +24,7 @@ module.exports = {
       '/listing': 'http://localhost:3000',
       '/api': 'http://localhost:3000',
       '/upload': 'http://localhost:3000',
+      '/viewlisting': 'http://localhost:3000'
     },
   },
   module: {

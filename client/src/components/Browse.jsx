@@ -25,16 +25,13 @@ import Chip from '@mui/material/Chip';
 import BrowseItem from './BrowseItem.jsx';
 
 export default function Browse() {
-  const state = useSelector((state) => state.main);
-  const dispatch = useDispatch();
+  const listings = useSelector((state) => state.main.listings);
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const listings = state.listings;
+  const [isOpen, setIsOpen] = useState(false);
 
   const listingBundle = [];
   for (let i = 0; i < listings.length; i++) {
-    listingBundle.push(<BrowseItem listing={listings[i]} />);
+    listingBundle.push(<BrowseItem key={listings[i]._id} listing={listings[i]} />);
   }
   /************ Populating tags ***************/
   // declare fnc getTags to pull tags from listings (mock listings for now)

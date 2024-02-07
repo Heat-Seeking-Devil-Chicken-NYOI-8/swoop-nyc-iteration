@@ -4,7 +4,7 @@ import { useNavigate, link } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { store } from '../store';
 
-const ListingPopUp = ({ name, url, _id }) => {
+const ListingPopUp = ({listing, clickHandler}) => {
   // const navigate = useNavigate();
 
   // const state = useSelector((state) => state.main);
@@ -19,13 +19,11 @@ const ListingPopUp = ({ name, url, _id }) => {
         border: '1px solid red',
       }}
     >
-      <b>{name}</b>
+      <b>{listing.description}</b>
       <img
-        src={url}
+        src={listing.url}
         width="100%"
-        onClick={() => {
-          setActiveListing(state.listings[_id - 1]);
-        }}
+        onClick={() => clickHandler(listing)}
       ></img>
     </div>
   );

@@ -1,49 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setNavPosition } from '../mainSlice';
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import KeyboardBackspaceOutlinedIcon from '@mui/icons-material/KeyboardBackspaceOutlined';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import { Loader } from '@googlemaps/js-api-loader';
-import { act } from 'react-test-renderer';
 
 export default function ViewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const activeListing = state.activeListing;
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
       version: 'weekly',
     });
-    createMap({ lat: 40.706086, lng: -73.996864 }, 'listingMap', loader); // createMap where div id="listingMap"
+    createMap(
+      {
+        lat: parseFloat(activeListing.lat),
+        lng: parseFloat(activeListing.lng),
+      },
+      'listingMap',
+      loader
+    ); // createMap where div id="listingMap"
   }, []);
-
-  /********* Determine which listing to render to page ***********/
-  const activeListing = state.activeListing;
-  const listings = state.listings;
-  // console.log(listings)
-  // console.log(typeof activeListing);
-  const listingToRender = [];
-
-  const getListingById = (listingId) => {
-    for (let listing of listings) {
-      if (listing._id === parseInt(listingId)) {
-        listingToRender.push(
-          <Box alignContent="center">
-            <img className="squareImg" src={listing.url} />
-          </Box>
-        );
-        return;
-      }
-    }
-  };
-
-  getListingById(activeListing);
 
   async function createMap(center, div, loader) {
     loader.importLibrary('core').then(() => {
@@ -87,7 +72,7 @@ export default function ViewListing() {
             Back
           </Button>
         </Box>
-        {listingToRender}
+        <img className="squareImg" width={'30px'} src={activeListing.url} />
         <Box margin="10 0">
           <Chip label="Chair" sx={{ padding: '0 5', margin: '5' }} />
           <Chip label="Blue" sx={{ padding: '0 5', margin: '5' }} />
@@ -98,10 +83,7 @@ export default function ViewListing() {
 
         <Box display="flex" flexWrap="wrap" padding="10 0">
           <Typography variant="body1" color="inherit" component="div">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            {activeListing.description}
           </Typography>
         </Box>
 

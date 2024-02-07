@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { setNavPosition, initializeListings } from '../mainSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNavPosition, setActiveListing } from '../mainSlice.js';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
-import { store } from '../store.js';
 import { useNavigate } from 'react-router-dom';
 
 export default function Map() {
@@ -68,42 +67,29 @@ export default function Map() {
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
     }
-
-    //if listings is not empty, add each element as a marker 
+    //if listings is not empty, add each element as a marker
     if (state.listings.length > 0) {
       state.listings.forEach((el) => {
-        addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
+        addMarker(el, map);
       });
       return;
     }
-
-    //if state is empty fetch and update state
-    if (state.listings.length == 0) {
-      fetch('/listing')
-        //data to get back should be an array of objects {name:, lat:, lng}
-        .then((data) => data.json())
-        .catch(() => console.log('i failed here'))
-        .then((data) => {
-          dispatch(initializeListings(data))
-          data.forEach((el) => {
-            addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
-          });
-        })
-        .catch(() => console.log('error setting markers'));
-    }
   }
 
+  function clickHandler(listing) {
+    dispatch(setActiveListing(listing));
+    navigate('/viewlisting');
+  }
   //Create a marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
   //@Params {string} -url
   //@Params {map} -  map : google maps object to place marker on
-  function addMarker(name, lat, lng, url, _id, map) {
+  function addMarker(listing, map) {
     const newMarker = new google.maps.Marker({
-      position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+      position: { lat: parseFloat(listing.lat), lng: parseFloat(listing.lng) },
       map: map,
     });
-
     //create an infowindow to be attached to the specified marker
     const infowindow = new google.maps.InfoWindow({});
     let tempdiv;
@@ -113,9 +99,7 @@ export default function Map() {
       tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
       ReactDOM.render(
-        <Provider store={store}>
-          <ListingPopUp name={name} url={url} _id={_id} />
-        </Provider>,
+        <ListingPopUp listing={listing} clickHandler={clickHandler} />,
         tempdiv
       );
       //set the contents of the inforwindow to the div now containing the ListingPopUp
@@ -155,14 +139,10 @@ export default function Map() {
       })
       .catch(() => console.log('could not set center'));
   }
-  console.log(state.listings);
   /***********************************RENDER COMPONENT************************************** */
   return (
     <div>
       <div id="map" style={{ height: '80vh', width: '100%' }}></div>
-      <button onClick={addMarker} style={{ border: '1px solid red' }}>
-        add
-      </button>
       <p>
         center is lat:{center[0]} lng:{center[1]}
       </p>
