@@ -1,42 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setNavPosition, addNewListing } from "../mainSlice";
-import { Box } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import { Loader } from "@googlemaps/js-api-loader";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setNavPosition, addNewListing } from '../mainSlice';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import { Loader } from '@googlemaps/js-api-loader';
 
 export default function PreviewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //renders map on screen with marker of where the newListingPhoto state is
   useEffect(() => {
     const loader = new Loader({
-      apiKey: "AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4",
-      version: "weekly",
+      apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
+      version: 'weekly',
     });
     createMap(
       {
         lat: state.newListingPhoto.lat,
         lng: state.newListingPhoto.lng,
       },
-      "listingMap",
+      'listingMap',
       loader
     ); // createMap where div id="listingMap"
   }, []);
 
+  //create a map and add a marker to the center
   async function createMap(center, div, loader) {
-    loader.importLibrary("core").then(() => {
+    loader.importLibrary('core').then(() => {
       const newMap = new google.maps.Map(document.getElementById(div), {
         center: center, // {lat, lng}
         zoom: 15,
@@ -50,9 +48,10 @@ export default function PreviewListing() {
     });
   }
 
+  //add the tags and info to the SQL Database
   const formSubmit = async (e) => {
     e.preventDefault(); // prevent page reload on submit
-    const tags = e.target[0].value.split(" ");
+    const tags = e.target[0].value.split(' ');
     const description = e.target[2].value;
 
     const postData = {
@@ -62,18 +61,30 @@ export default function PreviewListing() {
       tags: tags,
       description: description,
     };
-    fetch("/listing/addListing", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+
+    let img = state.newListingPhoto.url.split('/').pop();
+
+    fetch(`/listing/${img}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postData),
     })
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
-        dispatch(addNewListing({ ...data, ...postData }));
-        console.log("succesfully added");
-        navigate("/");
+        dispatch(addNewListing(data[0]));
+        console.log('succesfully added');
+       navigate('/map');
       })
-      .catch((err) => console.log("Error posting listing: ", err));
+      .catch((err) => console.log('Error posting listing: ', err));
+  };
+
+  //cancel. remove image from database and navigate back to upload page
+  const formCancel = async () => {
+    let img = state.newListingPhoto.url.split('/').pop();
+    const data = await fetch(`/listing/${img}`, {
+      method: 'DELETE',
+    });
+    navigate('/upload');
   };
 
   return (
@@ -112,7 +123,7 @@ export default function PreviewListing() {
             label="Tags (space-separated)"
             name="tags"
             variant="standard"
-            // defaultValue="tag1 tag2 tag3 tag4 tag5"
+            placeholder="tag1 tag2 tag3 tag4 tag5"
           ></TextField>
         </Box>
 
@@ -125,16 +136,12 @@ export default function PreviewListing() {
             label="Description"
             name="description"
             variant="standard"
-            // defaultValue="hi this is the description of the item that is listed above
-            // bcvdhjfzkbvx,cnjmnvdjf,nslac.masKXLs;ajefrkghjlsbd.nv
-            // zmxc,bvskdjfhzdcskafielrsurbhjvdfjn.cskmdlwejiflshugv n
-            // vbhdjcnjkdsjvbgvjnkdewjruhvjnfvbckjdf
-            // vhgkbj,nk.bhjvghcfgdxsrftyguhbhvgfcfvbn"
+            placeholder="Description of the item that is listed above"
           />
         </Box>
 
-        <Box width="100%" height={"200"} marginTop="30">
-          <div id="listingMap" style={{ height: "100%", width: "100%" }}></div>
+        <Box width="100%" height={'200'} marginTop="30">
+          <div id="listingMap" style={{ height: '100%', width: '100%' }}></div>
         </Box>
 
         <Box
@@ -147,13 +154,13 @@ export default function PreviewListing() {
           <Button
             variant="contained"
             size="small"
-            onClick={() => navigate("/upload")}
+            onClick={() => formCancel()}
             sx={{
-              margin: "0 10 20 10",
-              padding: "10",
-              width: "100",
-              backgroundColor: "#ccc",
-              color: "333",
+              margin: '0 10 20 10',
+              padding: '10',
+              width: '100',
+              backgroundColor: '#ccc',
+              color: '333',
             }}
           >
             Cancel
@@ -161,7 +168,7 @@ export default function PreviewListing() {
           <Button
             variant="contained"
             size="small"
-            sx={{ margin: "0 10 20 10", padding: "10", width: "100" }}
+            sx={{ margin: '0 10 20 10', padding: '10', width: '100' }}
             type="submit"
           >
             Post

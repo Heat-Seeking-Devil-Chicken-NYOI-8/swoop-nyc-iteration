@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { setNavPosition, initializeListings } from '../mainSlice';
-import { Box } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNavPosition, setActiveListing } from '../mainSlice.js';
 import { Loader } from '@googlemaps/js-api-loader';
 import ListingPopUp from './ListingPopUp.jsx';
-import PreviewListing from './PreviewListing.jsx';
-import { store } from '../store.js';
 import { useNavigate } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
 
 export default function Map() {
   /****************************************STATES******************************************* */
@@ -21,6 +19,7 @@ export default function Map() {
   let markerList = [];
   /**************************************USE EFFECT***************************************** */
   //Set-up initial map of first render
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
@@ -66,50 +65,50 @@ export default function Map() {
   /****************************HANDLER FUNCTIONS************************************ */
   function fetchListings() {
     console.log('wait');
+    //remove markers
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
     }
-    fetch('/listing', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(center),
-    })
-      //data to get back should be an array of objects {name:, lat:, lng}
-      .then((data) => data.json())
-      .catch(() => console.log('i failed here'))
-      .then((data) => {
-        console.log(data.rows);
-        data.rows.forEach((el) => {
-          initializeListings(data);
-          addMarker(el.description, el.lat, el.lng, el.url, el._id, map);
-        });
-      })
-      .catch(() => console.log('error setting markers'));
+    //if listings is not empty, add each element as a marker
+    if (state.listings.length > 0) {
+      state.listings.forEach((el) => {
+        addMarker(el, map);
+      });
+      return;
+    }
   }
-  //Create a random marker on the map
+
+  function clickHandler(listing) {
+    dispatch(setActiveListing(listing));
+    navigate('/viewlisting');
+  }
+  //Create a marker on the map
   //@Params {string} - name : decription of listing
   //@Params {number} - lat, lng : latitude and longitude of maker
   //@Params {string} -url
   //@Params {map} -  map : google maps object to place marker on
-  function addMarker(name, lat, lng, url, _id, map) {
+  function addMarker(listing, map) {
     const newMarker = new google.maps.Marker({
-      position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+      position: { lat: parseFloat(listing.lat), lng: parseFloat(listing.lng) },
       map: map,
     });
-
     //create an infowindow to be attached to the specified marker
     const infowindow = new google.maps.InfoWindow({});
     let tempdiv;
     //onclick event of the marker which will open up a listingpopup
     newMarker.addListener('click', () => {
+      //close if tempdiv is defined
+      if (tempdiv != undefined) {
+        infowindow.close();
+        tempdiv = undefined;
+        return;
+      }
       //create an empty div to be put into the infowindow and store that element in a temporary variable
       tempdiv = document.createElement('div');
       //append the Listingpopup react component to the temporary div
-      ReactDOM.render(
-        <Provider store={store}>
-          <ListingPopUp name={name} url={url} _id={_id} />
-        </Provider>,
-        tempdiv
+      const root = createRoot(tempdiv);
+      root.render(
+        <ListingPopUp listing={listing} clickHandler={clickHandler} />
       );
       //set the contents of the inforwindow to the div now containing the ListingPopUp
       //infowindow content takes in a string, or a dom element. NOT A REACT COMPONENT
@@ -122,10 +121,9 @@ export default function Map() {
       });
     });
     //add event listener to unmount the listing popup to not clutter the dom and end the react component lifecycle
-    infowindow.addListener('closeclick', () => {
-      console.log('unmounting');
-      ReactDOM.unmountComponentAtNode(tempdiv);
-    });
+    // infowindow.addListener('closeclick', () => {
+    //   root.render();
+    // });
     //add the marker to the markerList array for reference to be cleaned up later
     markerList.push(newMarker);
   }
@@ -148,14 +146,10 @@ export default function Map() {
       })
       .catch(() => console.log('could not set center'));
   }
-
   /***********************************RENDER COMPONENT************************************** */
   return (
     <div>
       <div id="map" style={{ height: '80vh', width: '100%' }}></div>
-      <button onClick={addMarker} style={{ border: '1px solid red' }}>
-        add
-      </button>
       <p>
         center is lat:{center[0]} lng:{center[1]}
       </p>

@@ -3,27 +3,29 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 const path = require('path');
-const db = require('./model.js');
 
 // parse JSON from incoming requests
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
 
+// handle requests from static files
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
+
 /****************************ROUTER IMPORT******************************************* */
 const googleMapsRouter = require('./Routers/googleMapsRouter.js');
 const listingRouter = require('./Routers/listingRouter.js');
 
-/***********************HANDLING STATIC FILES********************************************* */
-// handle requests from static files
-app.use('/dist', express.static(path.join(__dirname, '../dist')));
-
+/***********************MAIN PAGE LOAD********************************************* */
+// main page get. send them the html file
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
+});
 app.get('/map', (req, res) => {
   res.redirect('/');
 });
-// route handler to respond with main app
-app.get('/', (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, '../public/index.html'));
+app.get('/upload', (req, res) => {
+  res.redirect('/');
 });
 
 /******************************ACTIONS**************************************** */
@@ -43,7 +45,7 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
-    message: { err: 'An error occurred' },
+    message: { err: 'this is the global error' },
   };
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
