@@ -27,15 +27,18 @@ export default function Upload() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
+    <Box display="flex" flexDirection="column" height="100vh"
+      alignItems="center">
       <Button
         component="label"
         sx={{
           border: '5px dotted #ccc',
-          minHeight: '82vh',
-          minWidth: '83vw',
-          marginTop: '5vh',
-          marginX: '5vw',
+          minHeight: '50vh',
+          maxWidth: '50vw',
+          marginTop: 'auto',
+          marginBottom: '28vh',
+          marginX: 'auto',
+          paddingX: '5vw',
           color: '#999',
         }}
       >

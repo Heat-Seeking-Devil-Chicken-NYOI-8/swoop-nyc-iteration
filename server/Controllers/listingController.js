@@ -3,6 +3,8 @@ const supabase = require('../Models/SupabaseModel.js');
 const listingController = {};
 const exifr = require('exifr');
 
+console.log('entering listingController...')
+
 //get all the available listings
 listingController.getListings = async (req, res, next) => {
   // const query = 'SELECT * FROM listings'; // TO DO: return [{_id, creation_date, description, tags = [], url, lat, lng, flag}, ...]
@@ -10,9 +12,10 @@ listingController.getListings = async (req, res, next) => {
   //   const data = await db.query(query);
   //   res.locals.data = data;
   try {
+    console.log('listingController/getListings: about to get listings from supabase...')
     let { data: listings, error } = await supabase.from('listings').select('*');
     res.locals.listings = listings
-    if (error) throw error
+    if (error) throw new Error(error)
     next();
   } catch (e) {
     next({
@@ -37,7 +40,7 @@ listingController.addListing = async (req, res, next) => {
     const { data, error } = await supabase
       .from('listings')
       .insert([
-        { url: url, lat: lat, lng: lng, tags:tags, description: description, flag: true },
+        { url: url, lat: lat, lng: lng, tags: tags, description: description, flag: true },
       ])
       .select();
     res.locals.data = data;

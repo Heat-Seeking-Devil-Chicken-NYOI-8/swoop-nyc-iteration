@@ -39,6 +39,15 @@ export default function Browse() {
 
   let listingBundle = [];
 
+  // render error
+  if (!listings) {
+    return (
+      <>
+        <p>Ruh Roh!</p>
+      </>
+    )
+  }
+
   listingBundle = listings
     .filter((el) => included(el.tags, selectedTags))
     .map((el) => (
@@ -54,6 +63,7 @@ export default function Browse() {
     }
     return false;
   }
+
 
   /*********** Searching by Tags **************/
   // const searchByTags = (listings) => {
@@ -78,7 +88,7 @@ export default function Browse() {
   const tags = {};
 
   const populateTagList = (listings) => {
-    if (listings.length > 0) {
+    if (listings && listings.length > 0) {
       listings.forEach((el) => {
         el.tags.forEach((tag) => {
           tags[tag] ? tags[tag]++ : (tags[tag] = 1);
@@ -133,7 +143,7 @@ export default function Browse() {
               id="search-tags"
               options={Object.keys(tags)}
               freeSolo
-              onChange={(e,value)=>{setSelectedTags(value)}}
+              onChange={(e, value) => { setSelectedTags(value) }}
               renderTags={(value, getTagProps) => {
                 return value.map((option, index) => {
                   console.log('map: option, index', option, index);
