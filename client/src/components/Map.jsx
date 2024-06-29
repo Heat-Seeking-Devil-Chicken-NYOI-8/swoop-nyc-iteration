@@ -26,7 +26,7 @@ export default function Map() {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyB2lekz0djk6ppxjL1lk5h8haGS4V1HDPw',
+      apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
       version: 'weekly',
     });
     // Load the Google Maps API library

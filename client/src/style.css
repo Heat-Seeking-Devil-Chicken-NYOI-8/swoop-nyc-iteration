@@ -5,6 +5,11 @@
   border-radius: 10px;
 }
 
+.previewImg {
+  object-fit: cover;
+  width: 60%;
+}
+
 /* #uploadInput {
   height: 100%;
   width: 100%;

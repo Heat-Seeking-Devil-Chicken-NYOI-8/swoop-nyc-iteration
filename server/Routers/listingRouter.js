@@ -25,20 +25,20 @@ router.post(
   listingController.addPhoto,
   listingController.getCoor,
   (req, res) => {
-    console.log('res.locals', res.locals);
+    console.log('added photo to db and got coordinates');
     return res.status(200).json(res.locals);
   }
-  );
+);
 
 //add to the sql database
-router.post('/:img', listingController.addListing, (req,res)=>{
+router.post('/:img', listingController.addListing, (req, res) => {
   res.status(201).json(res.locals.data)
-  })
+})
 
-  
-  
-  //delete photo from supabase
-router.delete('/:img', listingController.deletePhoto, (req, res)=>{
+
+
+//delete photo from supabase
+router.delete('/:img', listingController.deletePhoto, (req, res) => {
   return res.status(200).send('deleted')
 })
 

@@ -72,7 +72,7 @@ export default function Upload() {
             variant="body2"
             textAlign="center"
             fontSize={'8vw'}
-            maxBlockSize="180px"
+            maxblocksizeize="180px"
           >
             Upload
             <br />

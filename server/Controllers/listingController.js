@@ -28,8 +28,10 @@ listingController.getListings = async (req, res, next) => {
 
 //add a listing
 listingController.addListing = async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { url, lat, lng, tags, description } = req.body;
+  console.log("req.body contents: ", typeof url, typeof lat, typeof lng, typeof tags, typeof description)
+  console.log("req.body contents: ", url, lat, lng, tags, description)
   // const query =
   //   'INSERT INTO listings (url, lat, lng, description, flag) VALUES ($1, $2, $3, $4, $5) RETURNING (_id, creation_date)'; // TO DO: return {_id, creation_date}
   // try {
@@ -39,16 +41,19 @@ listingController.addListing = async (req, res, next) => {
   try {
     const { data, error } = await supabase
       .from('listings')
-      .insert([
+      .insert(
         { url: url, lat: lat, lng: lng, tags: tags, description: description, flag: true },
-      ])
+      )
       .select();
+
+    console.log('listingController/addListing/data: ', data)
+    if (!data || error) throw error ? error : new Error("Nothing returned from database...");
+
     res.locals.data = data;
-    if (error) throw error;
     next();
   } catch (e) {
     next({
-      log: `controller.addListing: ${e}`,
+      log: `controller.addListing: ${e.message}`,
       status: 500,
       message: { err: 'An error occurred. See log for details.' },
     });
@@ -65,10 +70,11 @@ listingController.addPhoto = async (req, res, next) => {
     const { data, error } = await supabase.storage
       .from('Swoop')
       .upload(fileName, req.file.buffer, { contentType: 'image/jpeg' });
-    console.log(data);
+    if (error) throw new Error(error);
+    console.log('listingController/addPhoto/data: ', data);
     res.locals.url = await supabase.storage.from('Swoop').getPublicUrl(fileName)
       .data.publicUrl;
-    console.log(res.locals.url);
+    console.log('listingController/addphoto/res.locals.url', res.locals.url);
     next();
   } catch (e) {
     next({

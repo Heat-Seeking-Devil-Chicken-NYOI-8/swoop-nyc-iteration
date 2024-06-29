@@ -23,6 +23,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import SearchIcon from '@mui/icons-material/Search';
 import Chip from '@mui/material/Chip';
 import BrowseItem from './BrowseItem.jsx';
+import AutoTag from './AutoTag.jsx';
 
 export default function Browse() {
   const listings = useSelector((state) => state.main.listings);
@@ -138,7 +139,8 @@ export default function Browse() {
             >
               <List>{tagListItems}</List>
             </Drawer>
-            <Autocomplete
+            <AutoTag setSelectedTags={setSelectedTags} tags={tags} placeholderText={"Search by Tags"} />
+            {/* <Autocomplete
               multiple
               id="search-tags"
               options={Object.keys(tags)}
@@ -172,9 +174,10 @@ export default function Browse() {
                 backgroundColor: 'white',
                 margin: '10px',
                 width: '100%;',
+                display: "flex",
               }}
               size="small"
-            />
+            /> */}
             <SearchIcon sx={{ marginLeft: '3px' }} />
           </Toolbar>
         </AppBar>
