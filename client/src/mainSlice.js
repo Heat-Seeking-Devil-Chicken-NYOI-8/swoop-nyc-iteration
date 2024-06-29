@@ -89,7 +89,7 @@ export const mainSlice = createSlice({
     //load the lisings
     initializeListings: (state, action) => {
       // payload: [{same format as addNew Listing}, {},...]
-      console.log('initializing')
+      console.log('mainSlice/reducers.initializeListings: initializing')
       state.listings = action.payload;
     },
     //add to the current listings

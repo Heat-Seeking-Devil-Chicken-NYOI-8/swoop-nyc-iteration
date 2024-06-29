@@ -1,31 +1,31 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-const ListingPopUp = ({listing, clickHandler}) => {
+const ListingPopUp = ({ listing, clickHandler }) => {
 
   return (
     <Box
       className="listingPopUp"
-      style={{
+      sx={{
         width: '250px',
-        height: '250px',
-        display:'flex',
+        height: 'content-fit',
+        display: 'flex',
         flexDirection: "column",
-        justifyContent:"center",
-        alignItems:'center',
+        justifyContent: "center",
+        alignItems: 'center',
         border: '1px solid grey',
         borderRadius: '10px',
-        backgroundColor:'#fff'
+        backgroundColor: '#fff'
       }}
     >
       <Typography>{listing.description}</Typography>
-      <Box flex="0 0 auto" width="80%">
-      <img
-        src={listing.url}
-        className="squareImg"
-        onClick={() => clickHandler(listing)}
-      />
-    </Box>
+      <Box position="relative" flexGrow={1} width="80%">
+        <img
+          src={listing.url}
+          className="squareImg"
+          onClick={() => clickHandler(listing)}
+        />
+      </Box>
     </Box>
   );
 };

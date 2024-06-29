@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production nodemon -r dotenv/config server/server.js",
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack serve --open & NODE_ENV=development nodemon -r dotenv/config server/server.js",
+    "tunnel": "ngrok http http://localhost:8080",
     "test": "jest"
   },
   "jest": {

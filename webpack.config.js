@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack')
+const dotenv = require('dotenv').config().parsed
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -14,6 +16,7 @@ module.exports = {
   target: 'web',
   devServer: {
     host: '0.0.0.0',
+    historyApiFallback: true,
     // port: 8080 by default
     static: {
       directory: path.join(__dirname, 'public'),
@@ -44,6 +47,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html'),
+    }),
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_GOOGLE_API_KEY': JSON.stringify(dotenv.REACT_APP_GOOGLE_API_KEY),
     }),
   ],
   resolve: {

@@ -27,8 +27,11 @@ export default function App() {
   useEffect(() => {
     fetch('/listing')
       //data to get back should be an array of objects {name:, lat:, lng}
-      .then((data) => data.json())
-      .catch(() => console.log('i failed here'))
+      .then((data) => {
+        console.log('App/useEffect/fetch/then/data: ', data);
+        return data.json()
+      })
+      .catch(() => console.log('App.jsx/useEFfect - i failed here'))
       .then((data) => {
         dispatch(initializeListings(data));
       })
@@ -48,7 +51,13 @@ export default function App() {
           <Box
             sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}
           >
-            <Box backgroundColor="#eee" sx={{ flexGrow: 1 }}>
+            <Box backgroundColor="#eee"
+              sx={{
+                flexGrow: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Routes>
                 <Route path="/" element={<Browse />} />
                 <Route path="/upload" element={<Upload />} />

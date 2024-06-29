@@ -9,17 +9,22 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+
+import AutoTag from './AutoTag';
+
 import { Loader } from '@googlemaps/js-api-loader';
 
 export default function PreviewListing() {
   const state = useSelector((state) => state.main);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [description, setDescription] = useState("");
 
   //renders map on screen with marker of where the newListingPhoto state is
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
+      apiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`,
       version: 'weekly',
     });
     createMap(
@@ -51,14 +56,19 @@ export default function PreviewListing() {
   //add the tags and info to the SQL Database
   const formSubmit = async (e) => {
     e.preventDefault(); // prevent page reload on submit
-    const tags = e.target[0].value.split(' ');
-    const description = e.target[2].value;
+
+    // console.log("formSubmit/e.target", e.target);
+    // console.log("formSubmit/e.target[0].value", e.target[0].value);
+    // const tags = e.target[0].value.split(' ');
+    // const description = e.target[2].value;
+
+    // console.log(postData);
 
     const postData = {
       url: state.newListingPhoto.url,
       lat: state.newListingPhoto.lat,
       lng: state.newListingPhoto.lng,
-      tags: tags,
+      tags: selectedTags,
       description: description,
     };
 
@@ -72,8 +82,8 @@ export default function PreviewListing() {
       .then((data) => data.json()) // data = {_id, creation_date}
       .then((data) => {
         dispatch(addNewListing(data[0]));
-        console.log('succesfully added');
-       navigate('/map');
+        console.log('added new listing to state');
+        navigate('/map');
       })
       .catch((err) => console.log('Error posting listing: ', err));
   };
@@ -103,7 +113,7 @@ export default function PreviewListing() {
         <Typography variant="h5">Create Listing</Typography>
         <br />
         <Box alignContent="center">
-          <img className="squareImg" src={state.newListingPhoto.url} />
+          <img className="squareImg previewImg" src={state.newListingPhoto.url} />
         </Box>
 
         {/* <Box margin="10 0">
@@ -115,16 +125,7 @@ export default function PreviewListing() {
         </Box> */}
 
         <Box marginTop="20" width="100%">
-          <TextField
-            multiline
-            fullWidth
-            required
-            id="tags"
-            label="Tags (space-separated)"
-            name="tags"
-            variant="standard"
-            placeholder="tag1 tag2 tag3 tag4 tag5"
-          ></TextField>
+          <AutoTag setSelectedTags={setSelectedTags} tags={null} placeholderText="Related Tags: Press Enter to Input" />
         </Box>
 
         <Box marginTop="20" width="100%">
@@ -137,6 +138,10 @@ export default function PreviewListing() {
             name="description"
             variant="standard"
             placeholder="Description of the item that is listed above"
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            value={description}
           />
         </Box>
 
@@ -150,6 +155,7 @@ export default function PreviewListing() {
           alignContent="space-between"
           padding="10"
           marginTop="20"
+          marginBottom="50"
         >
           <Button
             variant="contained"

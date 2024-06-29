@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNavPosition, setActiveListing } from '../mainSlice.js';
 import { Loader } from '@googlemaps/js-api-loader';
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import ListingPopUp from './ListingPopUp.jsx';
 import { useNavigate } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
+
+// const GOOGLE_API_KEY = process.env.GOOGLE_API
 
 export default function Map() {
   /****************************************STATES******************************************* */
@@ -22,7 +26,7 @@ export default function Map() {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyADQU5Oic0aAZjytCZzVbo8MZOQSgNPqA4',
+      apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
       version: 'weekly',
     });
     // Load the Google Maps API library
@@ -40,12 +44,11 @@ export default function Map() {
       });
       //store the map as a state so it can be referenced outside
       //replace the search bar with the google maps places api searchbar
-      console.log(google.maps);
+      console.log("google.maps:", google.maps);
       // const mapSearch = new google.maps.places.SearchBox(
       //   document.getElementById('location')
       // );
       setMap(newMap);
-
       // mapSearch.addListener('places_changed', () =>
       //   console.log(mapSearch.getPlaces())
       // );
@@ -64,7 +67,7 @@ export default function Map() {
   }, [center]);
   /****************************HANDLER FUNCTIONS************************************ */
   function fetchListings() {
-    console.log('wait');
+    console.log('wait - fetching listings');
     //remove markers
     while (markerList.length != 0) {
       markerList.pop().setMap(null);
@@ -149,14 +152,16 @@ export default function Map() {
   /***********************************RENDER COMPONENT************************************** */
   return (
     <div>
-      <div id="map" style={{ height: '80vh', width: '100%' }}></div>
-      <p>
-        center is lat:{center[0]} lng:{center[1]}
-      </p>
-      <form name="myForm" onSubmit={(e) => zipCenter(e)} method="POST">
-        <input id="location" type="text" name="zip" />
-        <input type="submit" value="Submit" />
-      </form>
+      <div id="map" style={{ height: '75%', width: '100%' }}></div>
+      <Box id="map" height={"20%"} width="100%" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Typography>
+          center is lat:{center[0]} lng:{center[1]}
+        </Typography>
+        <form name="myForm" onSubmit={(e) => zipCenter(e)} method="POST">
+          <input id="location" type="text" name="zip" />
+          <input type="submit" value="Submit" />
+        </form>
+      </Box>
     </div>
   );
 }
